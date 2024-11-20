@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title')->comment('tiêu đề');
             $table->string('description')->comment("mô tả");
-            $table->integer('status');
+            $table->integer('status')->comment('Trạng thái');
+            $table->integer('assigned_to')->nullable()->comment('ID của user được giao việc');
+            $table->integer('department_id')->comment('phòng ban yêu cầu');
+            $table->integer('category_id')->comment('danh mục yêu cầu');
             $table->integer('priority')->comment('ưu tiên');
             $table->timestamps();
         });

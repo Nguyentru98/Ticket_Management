@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -18,6 +19,9 @@ class User extends Authenticatable
        {
            return $this->belongsTo(Department::class);
        }
+    public function ticket() {
+        return $this->hasMany(Ticket::class,"assigned_to");
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -29,6 +33,7 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'department_id'
 
     ];
 
