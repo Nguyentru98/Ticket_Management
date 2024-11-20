@@ -1,20 +1,40 @@
+<script setup>
+import { RouterLink } from 'vue-router'
+
+</script>
+
 <template>
-    <nav>
+    <nav class="border p-3">
         <ul>
             <li>
                 <img src="/images/logo.png" alt="" style="width: 100px" />
             </li>
-            <li>Bộ phận trợ giúp</li>
-            <li>Ticket</li>
-            <li>Báo cáo</li>
+            <li>
+                <router-link to="/">Danh sách ticket</router-link>
+            </li>
+            <li>
+                <router-link to="/createTicket">Tạo Ticket</router-link>
+            </li>
+            <li>
+                <router-link to="/report">Báo cáo</router-link>
+            </li>
         </ul>
+        <div class="d-flex align-items-center">
+            <span class="pi pi-bell"></span>
+            <span class="px-3">Nguyễn Văn Trụ</span>
+            <span class="pi pi-user"></span>
+        </div>
     </nav>
 </template>
-<script setup>
-
-</script>
 
 <style>
+a {
+    text-decoration: none;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+}
 ul {
     list-style: none;
     margin: 0;
@@ -23,5 +43,7 @@ ul {
     align-items: center;
     font-weight: bold;
 }
-
+li {
+    padding: 0 10px;
+}
 </style>

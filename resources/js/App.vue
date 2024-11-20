@@ -1,21 +1,30 @@
 <script setup>
 import Navbar from './layout/Navbar.vue'
+import Footer from './layout/Footers.vue'
 </script>
 
 <template>
-    <div>
-       <Navbar></Navbar>
+    <div class="wrapper container">
+        <div>
+            <Navbar></Navbar>
+        </div>
+        <main class="border">
+            <router-view/>
+        </main>
+        <div>
+            <Footer></Footer>
+        </div>
     </div>
-    <main>
-        <router-view/>
-    </main>
 </template>
 
 <style scoped>
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+main {
+    flex: 1;
+}
 </style>
