@@ -20,5 +20,5 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('/department', [DepartmentController::class, 'getDepartment']);
+Route::get('/department', [DepartmentController::class, 'ticket']);
 Route::get('/user', [UserController::class, 'getUser']);

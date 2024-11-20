@@ -14,4 +14,5 @@ class Categori extends Model
         'categories_name',
         'description',
     ];
+
 }

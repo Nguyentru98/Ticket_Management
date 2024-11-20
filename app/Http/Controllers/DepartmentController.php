@@ -7,9 +7,10 @@ use App\Models\Department;
 class DepartmentController extends Controller
 {
     //get department
-    public function getDepartment()
+    public function ticket()
     {
-        $data = Department::with('user')->get();
+        $data = Department::find(2)->ticket;
         dd($data);
     }
+    
 }

@@ -12,6 +12,9 @@ class Ticket extends Model
     public function user() : BelongsTo {
         return $this->belongsTo(User::class,'assigned_to');
     }
+    public function department() {
+        return $this->belongsTo(Department::class);
+    }
     protected $fillable = [
         'title',
         'description',

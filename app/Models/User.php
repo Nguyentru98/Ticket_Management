@@ -16,12 +16,16 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     public function department(): BelongsTo
-       {
-           return $this->belongsTo(Department::class);
-       }
-    public function ticket() {
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function assignedTo() 
+    {
         return $this->hasMany(Ticket::class,"assigned_to");
     }
+
+
     /**
      * The attributes that are mass assignable.
      *

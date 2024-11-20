@@ -8,7 +8,7 @@ class UserController extends Controller
 {
     //get ticket
     public function getUser() {
-        $data = User::with('ticket')->get();
+        $data = User::find(1)->assignedTo;
         dd($data);
     }
 }
