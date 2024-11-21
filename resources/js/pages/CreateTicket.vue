@@ -1,5 +1,17 @@
 <script setup>
+import { ref , reactive} from 'vue';
+    const formData = reactive({
+        'title' :"",
+        'description' :"",
+        // 'assigned_to' :'',
+        'department_id' :"",
+        'category_id' :"",
+        'priority' :"",
+    })
 
+    const createTicket = ()=> {
+        console.log('Form Data:', formData.title);
+    }
 </script>
 
 <template>
@@ -8,7 +20,7 @@
             <div class="p-3">
                 <div class="select-input mb-2">
                     <label class="py-2">Phòng ban <span class="obligatory">*</span></label>
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select" aria-label="Default select example" v-model="formData.department_id">
                         <option value="" disabled selected>-- Select an option --</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -16,17 +28,8 @@
                     </select>
                 </div>
                 <div class="select-input mb-2">
-                    <label class="py-2">Người yêu cầu <span class="obligatory">*</span></label>
-                    <select class="form-select" aria-label="Default select example">
-                        <option value="" disabled selected>-- Select an option --</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <div class="select-input mb-2">
-                    <label class="py-2">Độ ưu tiên <span class="obligatory">*</span></label>
-                    <select class="form-select" aria-label="Default select example">
+                    <label class="py-2">Người yêu cầu<span class="obligatory">*</span></label>
+                    <select class="form-select" aria-label="Default select example" v-model="formData.user_id">
                         <option value="" disabled selected>-- Select an option --</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -35,7 +38,16 @@
                 </div>
                 <div class="select-input mb-2">
                     <label class="py-2">Độ ưu tiên <span class="obligatory">*</span></label>
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select" aria-label="Default select example" v-model="formData.priority">
+                        <option value="" disabled selected>-- Select an option --</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="select-input mb-2">
+                    <label class="py-2">Danh mục<span class="obligatory">*</span></label>
+                    <select class="form-select" aria-label="Default select example" v-model="formData.category_id">
                         <option value="" disabled selected>-- Select an option --</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -49,18 +61,18 @@
                 <div class="">
                     <div class="mb-2">
                         <label class="py-2">Tiêu đề <span class="obligatory">*</span></label>
-                        <input class="form-control" placeholder="Tiêu đề">
+                        <input class="form-control" placeholder="Tiêu đề" v-model="formData.title">
                     </div>
                     <div class="">
                         <label class="mb-2">Mô tả</label>
                         <div>
-                            <textarea class="form-control" placeholder="Nội dung..."></textarea>
+                            <textarea class="form-control" placeholder="Nội dung..." v-model="formData.description"></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" @click="createTicket" class="btn btn-primary">
                         Gửi yêu cầu
                     </button>
                 </div>
