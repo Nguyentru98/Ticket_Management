@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\Models\Ticket;
+use Illuminate\Http\Request;
 
 class TicketServices
-{   
+{
     // get list ticket
     public function getTicket()
     {
-        return Ticket::all();
+        $tickets = Ticket::with(['department', 'user', 'category','assignedTo'])->get();;
+        return $tickets;
     }
-    // create ticket
-    public function createTicket($request)
+    public function createTicket(Request $request)
     {
         Ticket::create([
             'title' => $request->title,
             'description' => $request->description,
-            'assigned_to' => $request->assigned_to,
             'department_id' => $request->department_id,
             'category_id' => $request->category_id,
             'priority' => $request->priority,

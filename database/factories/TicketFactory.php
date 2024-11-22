@@ -26,6 +26,7 @@ class TicketFactory extends Factory
             'department_id'=>fake()->randomDigit(),
             'category_id'=>fake()->randomDigit(),
             'priority'=>fake()->randomDigit(),
+            'user_id'=>fake()->randomDigit(),
         ];
     }
 }

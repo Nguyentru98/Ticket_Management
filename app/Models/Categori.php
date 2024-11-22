@@ -15,4 +15,8 @@ class Categori extends Model
         'description',
     ];
 
+    public function ticket() {
+        return $this->hasMany(ticket::class);
+    }
+
 }

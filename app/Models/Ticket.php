@@ -9,19 +9,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Ticket extends Model
 {
     use HasFactory;
-    public function user() : BelongsTo {
+    public function assignedTo() : BelongsTo {
         return $this->belongsTo(User::class,'assigned_to');
+    }
+    public function user() : BelongsTo {
+        return $this->belongsTo(User::class,'user_id');
     }
     public function department() {
         return $this->belongsTo(Department::class);
     }
+    public function category() {
+        return $this->belongsTo(Categori::class,'category_id');
+    }
     protected $fillable = [
         'title',
         'description',
-        'status',
-        'assigned_to',
         'department_id',
         'category_id',
+        'user_id',
         'priority',
     ];
 }

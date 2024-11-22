@@ -20,11 +20,10 @@ class TicketController extends Controller
     public function getTicket() {
         $dataList  = $this->ticketServices->getTicket();
         return response()->json($dataList);
+       
     }
     // create ticket
-    public function createTicket($request) {
-        dd($request);
+    public function createTicket(Request $request) {
         $this->ticketServices->createTicket($request);
-       
     }
 }

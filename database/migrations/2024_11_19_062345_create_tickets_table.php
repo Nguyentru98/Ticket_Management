@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('title')->comment('tiêu đề');
             $table->string('description')->comment("mô tả");
-            $table->integer('status')->comment('Trạng thái');
+            $table->integer('status')->default(0)->comment('Trạng thái');
             $table->integer('assigned_to')->nullable()->comment('ID của user được giao việc');
             $table->integer('department_id')->comment('phòng ban yêu cầu');
             $table->integer('category_id')->comment('danh mục yêu cầu');
-            $table->integer('priority')->comment('ưu tiên');
+            $table->integer('priority')->comment('mức độ ưu tiên');
+            $table->integer('user_id')->comment('người tạo ticket');
             $table->timestamps();
         });
     }

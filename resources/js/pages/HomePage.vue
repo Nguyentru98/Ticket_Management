@@ -4,10 +4,17 @@ import { ref } from "vue";
 import { onMounted } from "vue";
 
 const listTicket = ref([]);
+const statusTexts = {
+        0: "Pending",
+        1: "In Progress",
+        2: "Completed",
+        3: "Cancelled",
+      };
 
 const fetchData = async () => {
   const res = await axios.get('http://127.0.0.1:8000/api/listTicket');
   listTicket.value = res.data;
+  console.log(res)
 };
 onMounted(() => {
     fetchData();
@@ -50,13 +57,13 @@ onMounted(() => {
           <tr v-for="(ticket, index) in listTicket" :key="ticket.id">
             <td>{{index + 1}}</td>
             <td>{{ ticket.title }}</td>
-            <td>{{ "tru" }}</td>
-            <td>Lỗi phần mềm</td>
-            <td>P.CN</td>
-            <td>Tru</td>
-            <td>high</td>
+            <td>{{ ticket.user?.name || '' }}</td>
+            <td>{{ ticket.category?.categories_name || ''}}</td>
+            <td>{{ ticket.department?.department_name || '' }}</td>
+            <td>{{ ticket.assignedTo?.name}}</td>
+            <td>{{ ticket.priority }}</td>
             <td>{{ ticket.updated_at }}</td>
-            <td>Chờ duyệt</td>
+            <td>{{ statusTexts[ticket.status] }}</td>
             <td></td>
           </tr>
         </tbody>
