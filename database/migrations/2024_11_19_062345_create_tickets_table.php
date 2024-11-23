@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('description')->comment("mô tả");
             $table->integer('status')->default(0)->comment('Trạng thái');
             $table->integer('assigned_to')->nullable()->comment('ID của user được giao việc');
-            $table->integer('department_id')->comment('phòng ban yêu cầu');
-            $table->integer('category_id')->comment('danh mục yêu cầu');
+            $table->foreignId('department_id')->comment('phòng ban yêu cầu');
+            $table->foreignId('category_id')->comment('danh mục yêu cầu');
             $table->integer('priority')->comment('mức độ ưu tiên');
-            $table->integer('user_id')->comment('người tạo ticket');
+            $table->foreignId('user_id')->comment('người tạo ticket');
             $table->timestamps();
         });
     }

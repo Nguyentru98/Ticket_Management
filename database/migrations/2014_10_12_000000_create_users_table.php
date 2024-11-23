@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('role')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('department_id')->nullable();
+            $table->foreignId('department_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

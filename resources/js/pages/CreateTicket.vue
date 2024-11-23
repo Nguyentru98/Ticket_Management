@@ -8,7 +8,9 @@ const formData = reactive({
   department_id: null,
   category_id: null,
   priority: null,
+  user_id:1,
 });
+const errors = {};
 
 const createTicket = async () => {
   try {
@@ -17,7 +19,9 @@ const createTicket = async () => {
     alert("Data added successfully");
     window.location.reload();
   } catch (error) {
-    console.error("Error adding data:", error.response?.data || error.message);
+    // console.error("Error adding data:", error.response?.data || error.message);
+    // console.error("Error adding data:", error.response.data.errors);
+    this.errors = error?.response?.data?.errors
   }
 };
 </script>
@@ -41,6 +45,7 @@ const createTicket = async () => {
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select>
+          <p v-if="errors.department_id" class="text-red">{{ errors.department_id[0]}}</p>
         </div>
         <div class="select-input mb-2">
           <label class="py-2"

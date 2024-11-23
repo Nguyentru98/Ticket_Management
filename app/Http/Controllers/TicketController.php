@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Services\TicketServices;
+use App\Http\Requests\FormDataRequest;
 
 class TicketController extends Controller
 {
@@ -23,7 +24,7 @@ class TicketController extends Controller
        
     }
     // create ticket
-    public function createTicket(Request $request) {
+    public function createTicket(FormDataRequest $request) {
         $this->ticketServices->createTicket($request);
     }
 }

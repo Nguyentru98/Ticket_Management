@@ -20,6 +20,7 @@ class TicketServices
             'description' => $request->description,
             'department_id' => $request->department_id,
             'category_id' => $request->category_id,
+            'user_id' => $request->user_id,
             'priority' => $request->priority,
         ]);
     }
