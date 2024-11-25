@@ -18,6 +18,12 @@ import { RouterLink } from 'vue-router'
             <li>
                 <router-link to="/report">Báo cáo</router-link>
             </li>
+            <li>
+                <router-link to="/#">Quản trị người dùng</router-link>
+            </li>
+            <li>
+                <router-link to="/loginForm">login</router-link>
+            </li>
         </ul>
         <div class="d-flex align-items-center">
             <span class="pi pi-bell"></span>
