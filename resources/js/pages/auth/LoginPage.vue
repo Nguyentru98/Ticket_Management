@@ -33,33 +33,33 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const apiClient = axios.create({
-  baseURL: "http://127.0.0.1:8000/api", // Thay bằng URL của backend
-  withCredentials: true, // Cần thiết để gửi cookie
+    baseURL: 'http://127.0.0.1:8000/api', // Thay bằng URL của backend
+    withCredentials: true, // Cần thiết để gửi cookie
 });
 
-const email = ref("");
-const password = ref("");
+const email = ref('');
+const password = ref('');
 const error = ref(null);
 const router = useRouter();
 
 const handleLogin = async () => {
-  try {
-    error.value = null; // Xóa thông báo lỗi
-    await apiClient.post("/login", {
-      email: email.value,
-      password: password.value,
-    });
-    localStorage.setItem("authToken", "1234556");
-    alert("Login successful"); // Hiển thị thông báo thành công
-    router.push("/"); // Chuyển hướng tới home list
-  } catch (err) {
-    error.value = err.response?.data?.message || "Login failed"; // Lưu lỗi
-  }
+    try {
+        error.value = null; // Xóa thông báo lỗi
+        await apiClient.post('/login', {
+            email: email.value,
+            password: password.value,
+        });
+        localStorage.setItem('authToken', '1234556');
+        alert('Login successful'); // Hiển thị thông báo thành công
+        router.push('/'); // Chuyển hướng tới dashboard
+    } catch (err) {
+        error.value = err.response?.data?.message || 'Login failed'; // Lưu lỗi
+    }
 };
 
 const handleLogout = async () => {
