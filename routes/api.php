@@ -19,11 +19,15 @@ use App\Http\Controllers\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// ticket
-Route::get('listTicket', [TicketController::class,"getTicket"]);
-Route::post('createTicket', [TicketController::class,"createTicket"]);
-// login
-Route::view('/loginForm', 'loginForm');
+// login ko can danh nhap
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
+
+// bat buoc dang nhap
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('listTicket', [TicketController::class,"getTicket"]);
+    Route::post('createTicket', [TicketController::class,"createTicket"]);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+

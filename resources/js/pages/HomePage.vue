@@ -2,8 +2,8 @@
 import axios from "axios";
 import { ref } from "vue";
 import { onMounted } from "vue";
-
-const listTicket = ref([]);
+import {ticketStore} from '@/store/ticket'
+const store = ticketStore();
 const statusTexts = {
   0: "Pending",
   1: "In Progress",
@@ -15,13 +15,8 @@ const priority_level = {
   1: "medium",
   2: "high",
 };
-const fetchData = async () => {
-  const res = await axios.get("http://127.0.0.1:8000/api/listTicket");
-  listTicket.value = res.data;
-  console.log(res);
-};
 onMounted(() => {
-  fetchData();
+  store.loadData();
 });
 </script>
 
@@ -58,7 +53,7 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(ticket, index) in listTicket" :key="ticket.id">
+          <tr v-for="(ticket, index) in store.list" :key="ticket.id">
             <td>{{ index + 1 }}</td>
             <td>{{ ticket.title }}</td>
             <td>{{ ticket.user?.name || "" }}</td>
