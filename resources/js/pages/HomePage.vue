@@ -38,7 +38,7 @@ onMounted(() => {
           />
         </div>
         <div class="px-3">
-          <button class="btn btn-primary">Tìm kiếm</button>
+          <button class="btn btn-primary">Tìm kiếm </button>
         </div>
       </div>
       <!--table-->
