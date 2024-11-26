@@ -5,7 +5,7 @@ import router from "@/router";
 export const useAuthStore  = defineStore('auth', {
     state: () => ({
         token: localStorage.getItem('authToken') || '',
-        activeUser: localStorage.getItem('activeUser') || '',
+        activeUser: localStorage.getItem('user') || '',
         permissions: localStorage.getItem('permissions') || [],// Mảng chứa các quyền của người dùng
         isLoading: false
     }),
