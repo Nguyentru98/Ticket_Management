@@ -33,9 +33,12 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {useAuthStore} from '@/store/auth'
+const store = useAuthStore();
+const email = ref('tru@gmail.com');
+const password = ref('password');
+const error = ref(null);
 
 const handleLogin = () => {
     try {

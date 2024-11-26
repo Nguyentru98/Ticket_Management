@@ -28,5 +28,6 @@ class Ticket extends Model
         'category_id',
         'user_id',
         'priority',
+        'assigned_to',
     ];
 }

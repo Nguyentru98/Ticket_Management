@@ -3,7 +3,11 @@ import axios from "axios";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import {ticketStore} from '@/store/ticket'
-const store = ticketStore();
+import { userStore } from "../store/user";
+
+const ticket = ticketStore();
+const user = userStore();
+
 const statusTexts = {
   0: "Pending",
   1: "In Progress",
@@ -15,14 +19,16 @@ const priority_level = {
   1: "medium",
   2: "high",
 };
+
 onMounted(() => {
-  store.loadData();
+  ticket.loadData();
+  user.getUserPCN();
 });
 </script>
 
 <template>
   <div class="container">
-    <div class="p-2 list-ticket">
+    <div class="p-2 list-ticket border">
       <!--search-->
       <div class="d-flex">
         <div class="mb-3">
@@ -53,13 +59,25 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(ticket, index) in store.list" :key="ticket.id">
+          <tr v-for="(ticket, index) in ticket.list" :key="ticket.id">
             <td>{{ index + 1 }}</td>
             <td>{{ ticket.title }}</td>
             <td>{{ ticket.user?.name || "" }}</td>
             <td>{{ ticket.category?.categories_name || "" }}</td>
             <td>{{ ticket.department?.department_name || "" }}</td>
-            <td>{{ ticket.assigned_to?.name || "null" }}</td>
+            <td>
+              <div v-if="ticket.assigned_to">
+                {{ ticket.assigned_to?.name || "null" }}
+              </div>
+              <div v-else>
+                <select class="form-select" @change="user.assignTo($event, ticket.id)">
+                  <option disabled selected>Assign to</option>
+                  <option v-for="(user) in user.listUser" :key="user.id" :value="user.id">
+                    {{ user.name }}
+                  </option>
+                </select>
+              </div>
+            </td>
             <td>{{ priority_level[ticket.priority]}}</td>
             <td>{{ ticket.updated_at }}</td>
             <td>{{ statusTexts[ticket.status] }}</td>
@@ -94,5 +112,9 @@ onMounted(() => {
 <style scoped>
 .page-item {
   padding: 0;
+}
+td,th {
+  text-align: center;
+ 
 }
 </style>

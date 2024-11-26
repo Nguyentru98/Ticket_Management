@@ -27,11 +27,13 @@ export const useAuthStore  = defineStore('auth', {
             router.push('/'); // Chuyển hướng sau khi đăng nhập thành công
         },
         logout() {
+            console.log(123)
             this.token = '';
             this.activeUser = '';
             this.permissions = [];
-            localStorage.removeItem('access_token');
+            localStorage.removeItem('authToken');
             localStorage.removeItem('user');
+            router.push('/login');
         }
     }
 })

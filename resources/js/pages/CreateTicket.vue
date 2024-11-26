@@ -28,7 +28,8 @@ const createTicket = async () => {
 
 
 <template>
-  <div class="d-flex" style="min-height: 100vh">
+  <div class="container">
+    <div class="border d-flex" style="min-height: 100vh">
     <div class="col-lg-4 border" style="background-color: #f4f4f4">
       <div class="p-3">
         <div class="select-input mb-2">
@@ -92,7 +93,7 @@ const createTicket = async () => {
         </div>
       </div>
     </div>
-    <div class="col-lg-8">
+    <div class="col-lg-8 border">
       <div class="p-3 d-flex flex-column justify-content-between">
         <div class="">
           <div class="mb-2">
@@ -124,6 +125,7 @@ const createTicket = async () => {
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

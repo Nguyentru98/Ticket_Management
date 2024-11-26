@@ -3,6 +3,7 @@ import { RouterLink } from "vue-router";
 import { useAuthStore } from "../store/auth";
 
 const authStore = useAuthStore();
+const user = JSON.parse(localStorage.getItem('user'))
 const logout = () => {
     authStore.logout();
 };
@@ -25,7 +26,7 @@ const logout = () => {
           <router-link to="/report">Báo cáo</router-link>
         </li>
         <li>
-          <router-link to="/#">Quản trị người dùng</router-link>
+          <router-link to="/listUser">Quản trị người dùng</router-link>
         </li>
       </ul>
       <div class="d-flex align-items-center">
@@ -40,7 +41,7 @@ const logout = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-          <span class="px-3">Nguyễn Văn Trụ</span>
+          <span class="px-3">{{ user?.name }}</span>
           <span class="pi pi-user"></span>
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -55,15 +56,13 @@ const logout = () => {
             </li>
            
             <li>
-              <form method="POST" action="">
-                <button type="submit" class="dropdown-item" href="#">
+                <button class="dropdown-item" @click="logout">
                   <div class="d-flex align-items-center">
                     <div class="dropdown-item-icon">
                     </div>
-                    <span class="text-item-dropdown" @click="logout">Đăng xuất</span>
+                    <span class="text-item-dropdown" >Đăng xuất</span>
                   </div>
                 </button>
-              </form>
             </li>
           </ul>
         </div>

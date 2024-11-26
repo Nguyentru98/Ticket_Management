@@ -10,7 +10,7 @@ class TicketServices
     // get list ticket
     public function getTicket()
     {
-        $tickets = Ticket::with(['department', 'user', 'category','assignedTo'])->get();;
+        $tickets = Ticket::with(['department', 'user', 'category', 'assignedTo'])->get();;
         return $tickets;
     }
     public function createTicket(Request $request)
@@ -22,6 +22,18 @@ class TicketServices
             'category_id' => $request->category_id,
             'user_id' => $request->user_id,
             'priority' => $request->priority,
+        ]);
+    }
+    // assignTo
+    public function assignTo(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        if (!$ticket) {
+            return response()->json(['message' => 'Ticket not found'], 404);
+        }
+        // Cập nhật giá trị
+        $ticket->update([
+            'assigned_to' => $request->assigned_to
         ]);
     }
 }

@@ -4,6 +4,8 @@ use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Models\Ticket;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +28,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('listTicket', [TicketController::class,"getTicket"]);
     Route::post('createTicket', [TicketController::class,"createTicket"]);
-
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+// get list user
+Route::get('/getUser', [UserController::class, 'getUser']);
+// get user PCN
+Route::get('/getUserPCN', [UserController::class, 'getUserPCN']);
+// assignTo
+Route::post('/assignTo', [TicketController::class, 'assignTo']);
 
 

@@ -1,7 +1,8 @@
-import homePage from '@/pages/HomePage.vue';
-import report from "@/pages/Report.vue";
+import HomePage from '@/pages/HomePage.vue';
+import Report from "@/pages/Report.vue";
 import CreateTicket from "@/pages/CreateTicket.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
+import UserList from '@/pages/UserList.vue';
 
 const routes = [
     {
@@ -17,7 +18,7 @@ const routes = [
         children: [
             {
                 path: '/', // Đường dẫn đầy đủ: "/hrm/user"
-                component: homePage,
+                component: HomePage,
             },
             {
                 path: 'createTicket', // Đường dẫn đầy đủ: "/createTicket"
@@ -25,7 +26,11 @@ const routes = [
             },
             {
                 path: 'report', // Đường dẫn đầy đủ: "/report"
-                component: report,
+                component: Report,
+            },
+            {
+                path: '/listUser', // Đường dẫn đầy đủ: "/report"
+                component: UserList,
             },
         ]
     },
