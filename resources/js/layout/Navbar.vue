@@ -1,7 +1,11 @@
 <script setup>
 import { RouterLink } from "vue-router";
+import { useAuthStore } from "../store/auth";
 
-
+const authStore = useAuthStore();
+const logout = () => {
+    authStore.logout();
+};
 </script>
 
 <template>
@@ -56,7 +60,7 @@ import { RouterLink } from "vue-router";
                   <div class="d-flex align-items-center">
                     <div class="dropdown-item-icon">
                     </div>
-                    <span class="text-item-dropdown">Đăng xuất</span>
+                    <span class="text-item-dropdown" @click="logout">Đăng xuất</span>
                   </div>
                 </button>
               </form>

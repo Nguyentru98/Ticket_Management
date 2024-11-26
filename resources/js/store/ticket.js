@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import api from "@/plugins/api";
 
-export const ticketStore  = defineStore('auth', {
+export const ticketStore  = defineStore('ticket', {
     state: () => ({
         list: [],
         isLoading: false
