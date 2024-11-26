@@ -37,6 +37,17 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+const handleLogin = () => {
+    try {
+        let payload = {
+            email: email.value,
+            password: password.value,
+        }
+        store.login(payload);
+    } catch (err) {
+        error.value = err.response?.data?.message || 'Login failed'; // Lưu lỗi
+    }
+};
 
 </script>
 
