@@ -5,7 +5,7 @@ import LoginPage from "@/pages/auth/LoginPage.vue";
 
 const routes = [
     {
-        path: '/',
+        path: '/login',
         component: LoginPage, // Trang login
         meta: { requiresAuth: false },
     },
