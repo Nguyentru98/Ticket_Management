@@ -11,7 +11,8 @@ export const userStore  = defineStore('user', {
         async getAllUser() {
             const res = await api.get('/getUser');
             let { data } = res
-            this.list = data;
+            this.listUser = data.original;
+            console.log(this.listUser,"listUser")
         },
         async getUser() {
             const res = await api.get('/getUser',{

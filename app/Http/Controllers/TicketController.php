@@ -13,21 +13,38 @@ class TicketController extends Controller
 
     public function __construct(
         TicketServices $ticketServices
-    )
-    {
+    ) {
         $this->ticketServices = $ticketServices;
     }
     //list ticket
-    public function getTicket() {
-        $dataList  = $this->ticketServices->getTicket();
+    // public function getTicket() {
+    //     $dataList  = $this->ticketServices->getTicket();
+    //     return response()->json($dataList);
+    // }
+    public function getTicket()
+    {
+        // Lấy user đang đăng nhập
+        $user = auth()->user();
+
+        // Kiểm tra vai trò của user
+        if ($user->roles->contains('name', 'admin')) {
+            // Admin xem tất cả ticket
+            $dataList = $this->ticketServices->getAllTickets();
+        } else {
+            // User chỉ xem ticket của chính mình
+            $dataList = $this->ticketServices->getUserTickets($user->id);
+        }
+
         return response()->json($dataList);
     }
     // create ticket
-    public function createTicket(FormDataRequest $request) {
+    public function createTicket(FormDataRequest $request)
+    {
         $this->ticketServices->createTicket($request);
     }
     // assignTo
-    public function assignTo(Request $request) {
+    public function assignTo(Request $request)
+    {
         $this->ticketServices->assignTo($request);
         return response()->json(['message' => 'Ticket updated successfully controller']);
     }

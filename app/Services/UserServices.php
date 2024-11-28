@@ -54,4 +54,5 @@ class UserServices
         $user = User::find($request->user_id);
         return response()->json(['name' => $user->name]);
     }
+    
 }

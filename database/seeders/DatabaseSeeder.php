@@ -17,5 +17,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\Notification::factory(5)->create();
         \App\Models\Department::factory(5)->create();
         \App\Models\Categori::factory(5)->create();
+        \App\Models\Roles::factory(5)->create();
+        \App\Models\RoleUser::factory(5)->create();
+        \App\Models\permission::factory(5)->create();
+        \App\Models\permission_role::factory(5)->create();
     }
 }

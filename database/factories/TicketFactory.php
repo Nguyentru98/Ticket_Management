@@ -22,7 +22,7 @@ class TicketFactory extends Factory
             'title'=>fake()->name(),
             'description'=>fake()->text(),
             'status'=>fake()->randomDigit(),
-            'assigned_to'=>fake()->randomDigit(),
+            'assigned_to'=>null,
             'department_id'=>fake()->randomDigit(),
             'category_id'=>fake()->randomDigit(),
             'priority'=>fake()->randomDigit(),

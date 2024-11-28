@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Roles;
 
 class User extends Authenticatable
 {
@@ -28,6 +30,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class);
     }
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Roles::class, 'role_users', 'user_id', 'role_id');
+    }
 
 
     /**
@@ -39,7 +45,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'phone',
         'department_id'
 

@@ -10,7 +10,7 @@ class TicketServices
     // get list ticket
     public function getTicket()
     {
-        $tickets = Ticket::with(['department', 'user', 'category', 'assignedTo'])->get();;
+        $tickets = Ticket::with(['department', 'user', 'category', 'assignedTo'])->get();
         return $tickets;
     }
     public function createTicket(Request $request)
@@ -35,5 +35,11 @@ class TicketServices
         $ticket->update([
             'assigned_to' => $request->assigned_to
         ]);
+    }
+    public function getAllTickets() {
+        return Ticket::with(['department', 'user'])->get(); // Load thêm quan hệ nếu cần
+    }
+    public function getUserTickets($userId) {
+        return Ticket::with(['department', 'user'])->where('user_id', $userId)->get();
     }
 }

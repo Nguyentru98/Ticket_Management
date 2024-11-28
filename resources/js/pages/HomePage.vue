@@ -7,7 +7,6 @@ import { userStore } from "../store/user";
 
 const ticket = ticketStore();
 const user = userStore();
-
 const statusTexts = {
   0: "Pending",
   1: "In Progress",

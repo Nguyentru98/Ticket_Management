@@ -21,4 +21,5 @@ class UserController extends Controller
         $data = $this->userServices->getUserPCN();
         return response()->json($data );
     }
+    
 }
