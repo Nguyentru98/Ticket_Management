@@ -22,5 +22,10 @@ class UserController extends Controller
         $data = $this->userServices->getUserPCN();
         return response()->json($data );
     }
+    // register
+    public function register(Request $request) {
+        // dd($request);
+        $this->userServices->register($request);
+    }
     
 }

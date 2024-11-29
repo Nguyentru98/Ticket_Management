@@ -15,9 +15,7 @@ export const useAuthStore  = defineStore('auth', {
     },
     actions: {
         async login(credentials) {
-            console.log(credentials)
             const res = await api.post('/login', credentials);
-            console.log(res);
             let {data} = res
             this.token = data.token;
             this.activeUser = data.user;
@@ -27,13 +25,13 @@ export const useAuthStore  = defineStore('auth', {
             router.push('/'); // Chuyển hướng sau khi đăng nhập thành công
         },
         logout() {
-            console.log(123)
             this.token = '';
             this.activeUser = '';
             this.permissions = [];
             localStorage.removeItem('authToken');
             localStorage.removeItem('user');
             router.push('/login');
-        }
+        },
+        
     }
 })

@@ -4,7 +4,9 @@ use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\UserController;
+use App\Models\Department;
 use App\Models\Ticket;
 
 /*
@@ -38,4 +40,8 @@ Route::get('/getUser', [UserController::class, 'getUser']);
 Route::get('/getUserPCN', [UserController::class, 'getUserPCN']);
 // assignTo
 Route::post('/assignTo', [TicketController::class, 'assignTo']);
+// register
+Route::post('/register', [UserController::class, 'register']);
+// get list department
+Route::get('/listDepartment', [DepartmentController::class, 'getListDepartment']);
 

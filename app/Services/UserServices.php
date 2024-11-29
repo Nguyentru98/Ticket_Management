@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 class UserServices
 {
     // get all user
@@ -54,5 +54,26 @@ class UserServices
         $user = User::find($request->user_id);
         return response()->json(['name' => $user->name]);
     }
-    
+    // register
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string',
+            'phone' => 'required|numeric',
+            'department' => 'required|numeric',
+        ]);
+
+        User::create([
+            'name' => $request->name, // Đảm bảo sử dụng đúng tên trường
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+            'department_id' => $request->department,
+        ]); // Thêm dấu chấm phẩy tại đây
+
+        return response()->json(['message' => 'User registered successfully'], 201); // Trả về phản hồi
+    }
+
 }

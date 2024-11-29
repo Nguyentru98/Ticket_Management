@@ -49,6 +49,11 @@ export const userStore  = defineStore('user', {
               event.target.value = ""; // Reset lại giá trị trong select
             }
         },
+        async register(payload) {
+          console.log(payload,"payload")
+          await api.post('/register',payload);
+          console.log("đăng ký thành công") ;
+        },
     }
 
 })
