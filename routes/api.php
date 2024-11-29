@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('createTicket', [TicketController::class,"createTicket"]);
     Route::post('/logout', [AuthController::class, 'logout']);
     // phân quyền xem tiket
-    Route::get('/tickets/{ticket}', [TicketController::class, 'canView']);
+    // Route::get('/tickets/{ticket}', [TicketController::class, 'canView']);
 });
 // get list user
 Route::get('/getUser', [UserController::class, 'getUser']);

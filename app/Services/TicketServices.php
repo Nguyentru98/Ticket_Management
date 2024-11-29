@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 class TicketServices
 {
     // get list ticket
-    public function getTicket()
-    {
-        $tickets = Ticket::with(['department', 'user', 'category', 'assignedTo'])->get();
-        return $tickets;
-    }
     public function createTicket(Request $request)
     {
         Ticket::create([
@@ -24,22 +19,27 @@ class TicketServices
             'priority' => $request->priority,
         ]);
     }
-    // assignTo
+    // assignTo 
     public function assignTo(Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
-        if (!$ticket) {
-            return response()->json(['message' => 'Ticket not found'], 404);
-        }
-        // Cập nhật giá trị
-        $ticket->update([
-            'assigned_to' => $request->assigned_to
+        $request->validate([
+            'ticket_id' => 'required|exists:tickets,id',
+            'assigned_to' => 'required|exists:users,id',
         ]);
+
+        $ticket = Ticket::find($request->ticket_id);
+        $ticket->update(['assigned_to' => $request->assigned_to]);
+
+        return response()->json(['message' => 'Ticket assigned successfully']);
     }
-    public function getAllTickets() {
-        return Ticket::with(['department', 'user'])->get(); // Load thêm quan hệ nếu cần
+
+    public function getAllTickets()
+    {
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->get(); // Load thêm quan hệ nếu cần
     }
-    public function getUserTickets($userId) {
-        return Ticket::with(['department', 'user'])->where('user_id', $userId)->get();
+    public function getUserTickets($userId)
+    {
+
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->get();
     }
 }

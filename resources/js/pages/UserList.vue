@@ -20,6 +20,8 @@ onMounted(() => {
           <th>Phone</th>
           <th>Phòng ban</th>
           <th>Phân quyền</th>
+          <th>Chức năng</th>
+          <th>Khóa tài khoản</th>
         </tr>
       </thead>
       <tbody>
@@ -42,6 +44,14 @@ onMounted(() => {
                 </select>
               </div>
           </td>
+          <td>
+            <span class="pi pi-trash px-2"></span>
+          </td>
+          <td>
+            <div class="form-check form-switch">
+            <input class="form-check-input pt-2" type="checkbox" id="flexSwitchCheckDefault" style="margin: auto;">
+          </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -52,5 +62,9 @@ onMounted(() => {
 td,
 th {
   text-align: center;
+}
+.pi-trash:hover {
+  color: blue;
+  cursor: pointer;
 }
 </style>

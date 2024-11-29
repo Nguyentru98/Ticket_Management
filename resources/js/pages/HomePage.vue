@@ -80,7 +80,10 @@ onMounted(() => {
             <td>{{ priority_level[ticket.priority]}}</td>
             <td>{{ ticket.updated_at }}</td>
             <td>{{ statusTexts[ticket.status] }}</td>
-            <td></td>
+            <td>
+              <span class="pi pi-trash px-2"></span>
+              <span class="pi pi-file-edit px-2"></span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -115,5 +118,10 @@ onMounted(() => {
 td,th {
   text-align: center;
  
+}
+.pi-file-edit:hover,
+.pi-trash:hover {
+  color: blue;
+  cursor: pointer;
 }
 </style>

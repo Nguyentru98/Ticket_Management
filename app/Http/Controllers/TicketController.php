@@ -40,7 +40,11 @@ class TicketController extends Controller
     // create ticket
     public function createTicket(FormDataRequest $request)
     {
+        $this->authorize('create', Ticket::class); // Kiểm tra quyền qua Policy
+
         $this->ticketServices->createTicket($request);
+    
+        return response()->json(['message' => 'Ticket created successfully'], 201);
     }
     // assignTo
     public function assignTo(Request $request)

@@ -9,6 +9,7 @@ export const userStore  = defineStore('user', {
     }),
     actions: {
         async getAllUser() {
+            this.listUser = [];
             const res = await api.get('/getUser');
             let { data } = res
             this.listUser = data.original;

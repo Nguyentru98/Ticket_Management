@@ -3,6 +3,7 @@ import Report from "@/pages/Report.vue";
 import CreateTicket from "@/pages/CreateTicket.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
 import UserList from '@/pages/UserList.vue';
+import Error from '@/pages/Error.vue';
 
 const routes = [
     {
@@ -29,8 +30,13 @@ const routes = [
                 component: Report,
             },
             {
-                path: '/listUser', // Đường dẫn đầy đủ: "/report"
+                path: 'listUser', // Đường dẫn đầy đủ: "/report"
                 component: UserList,
+            },
+            {
+                path: 'forbidden', // Đường dẫn đầy đủ: "/report"
+                name: 'Forbidden',
+                component: Error,
             },
         ]
     },
