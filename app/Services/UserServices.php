@@ -57,21 +57,40 @@ class UserServices
     // register
     public function register(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string',
             'phone' => 'required|numeric',
             'department' => 'required|numeric',
         ]);
 
-        User::create([
-            'name' => $request->name, // Đảm bảo sử dụng đúng tên trường
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-            'department_id' => $request->department,
-        ]); // Thêm dấu chấm phẩy tại đây
+        // User::create([
+        //     'name' => $request->name, // Đảm bảo sử dụng đúng tên trường
+        //     'phone' => $request->phone,
+        //     'password' => Hash::make($request->password),
+        //     'email' => $request->email,
+        //     'department_id' => $request->department,
+        // ]);
+        try {
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => bcrypt($validatedData['password']),
+                'phone' => $validatedData['phone'],
+                'department_id' => $validatedData['department'],
+            ]);
+    
+            return response()->json([
+                'message' => 'User created successfully',
+                'user' => $user,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred during user creation',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
 
         return response()->json(['message' => 'User registered successfully'], 201); // Trả về phản hồi
     }

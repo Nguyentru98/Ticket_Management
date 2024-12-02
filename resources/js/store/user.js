@@ -50,10 +50,16 @@ export const userStore  = defineStore('user', {
             }
         },
         async register(payload) {
-          console.log(payload,"payload")
-          await api.post('/register',payload);
-          console.log("đăng ký thành công") ;
-        },
+          try {
+              const response = await api.post('/register', payload);
+              console.log("Đăng ký thành công");
+              return response.data;
+          } catch (error) {
+              console.error("Lỗi trong register:", error); // Debug lỗi tại đây
+              throw error; // Ném lỗi ra ngoài
+          }
+      }
+      
     }
 
 })

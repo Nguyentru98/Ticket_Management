@@ -22,19 +22,31 @@
         <form v-else @submit.prevent="submitRegister">
           <div class="mb-3">
             <label for="register-username" class="form-label">Username</label>
-            <input type="text" id="register-username" class="form-control" placeholder="Enter username" v-model="registerData.name" required>
+            <input type="text" id="register-username" class="form-control" placeholder="Enter username" v-model="registerData.name">
+            <div v-if="errors.name" class="errors">
+              {{ errors.name }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="register-email" class="form-label">Email</label>
-            <input type="email" id="register-email" class="form-control" placeholder="Enter email" v-model="registerData.email" required>
+            <input type="email" id="register-email" class="form-control" placeholder="Enter email" v-model="registerData.email">
+            <div v-if="errors.email" class="errors">
+              {{ errors.email }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="register-password" class="form-label">Password</label>
-            <input type="password" id="register-password" class="form-control" placeholder="Enter password" v-model="registerData.password" required>
+            <input type="password" id="register-password" class="form-control" placeholder="Enter password" v-model="registerData.password">
+            <div v-if="errors.password" class="errors">
+              {{ errors.password }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="register-password" class="form-label">phone number</label>
-            <input type="number" id="register-password" class="form-control" placeholder="Enter phone" v-model="registerData.phone" required>
+            <input type="number" id="register-password" class="form-control" placeholder="Enter phone" v-model="registerData.phone">
+            <div v-if="errors.phone" class="errors">
+              {{ errors.phone }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="register-password" class="form-label">departments</label>
@@ -44,6 +56,9 @@
                 {{ department.department_name }}
               </option>
             </select>
+            <div v-if="errors.department" class="errors">
+              {{ errors.department }}
+            </div>
           </div>
           <button type="submit" class="btn btn-success w-100">Register</button>
           <p class="text-center mt-3">
@@ -57,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { departmentStore } from "../../store/department";
 import { userStore } from "../../store/user";
@@ -68,7 +83,6 @@ const department = departmentStore();
 const userSt = userStore()
 const email = ref("admin@gmail.com");
 const password = ref("password");
-const error = ref(null);
 const isLogin = ref(true); // Sử dụng `ref` để làm trạng thái động
 const registerData = ref({
   name: "",
@@ -77,7 +91,15 @@ const registerData = ref({
   phone: "",
   department: "",
 });
-// Methods
+// Validation errors
+const errors = reactive({
+    name: null,
+    email: null,
+    password: null,
+    phone: null,
+    department: null
+});
+// chuyển đăng kí - đăng nhập
 const toggleForm = () => {
   isLogin.value = !isLogin.value; // Chuyển đổi giữa Login và Register
   if(isLogin.value === false) {
@@ -85,7 +107,7 @@ const toggleForm = () => {
     console.log(department.getData())
   }
 };
-
+//đăng nhập
 const handleLogin = () => {
   try {
     let payload = {
@@ -97,9 +119,12 @@ const handleLogin = () => {
     error.value = err.response?.data?.message || "Login failed"; // Lưu lỗi
   }
 };
-
-const submitRegister = () => {
+// đăng kí
+const submitRegister = async () => {
   try {
+    Object.keys(errors).forEach((field) => {
+      errors[field] = null; // Đặt lại lỗi về null
+    });
     let payload = {
       name: registerData.value.name,
       email: registerData.value.email,
@@ -107,13 +132,28 @@ const submitRegister = () => {
       phone: registerData.value.phone,
       department: registerData.value.department,
     };
-    userSt.register(payload);    
-    toggleForm();
-  } catch (err) {
-    error.value = err.response?.data?.message || "Register failed"; // Lưu lỗi
+
+    // Sử dụng await để đảm bảo xử lý bất đồng bộ
+    await userSt.register(payload); 
+    if (!Object.values(errors).some((error) => error !== null)) {
+      toggleForm();
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      const validationErrors = error.response.data.errors;
+      // Map lỗi đến các trường tương ứng
+      Object.keys(validationErrors).forEach((field) => {
+        errors[field] = validationErrors[field][0]; // Chỉ hiển thị lỗi đầu tiên
+      });
+    } else {
+      console.error("Unexpected error:", error);
+    }
   }
 };
-
-
-
 </script>
+
+<style>
+.errors {
+  color: red !important;
+}
+</style>
