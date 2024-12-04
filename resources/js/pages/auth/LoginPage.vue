@@ -10,7 +10,10 @@
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter password" required v-model="password">
+            <div class="form-control">
+              <input :type="isPasswordVisible ? 'text' : 'password'" id="password" placeholder="Enter password" required v-model="password" style="border: none;width: 90%;">
+              <span :class="iconEye ? 'pi pi-eye':'pi pi-eye-slash'" @click="toggleShowPass"></span>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary w-100">Login</button>
           <p class="text-center mt-3">
@@ -29,7 +32,7 @@
           </div>
           <div class="mb-3">
             <label for="register-email" class="form-label">Email</label>
-            <input type="email" id="register-email" class="form-control" placeholder="Enter email" v-model="registerData.email">
+              <input type="email" class="form-control" id="register-email" placeholder="Enter email" v-model="registerData.email">
             <div v-if="errors.email" class="errors">
               {{ errors.email }}
             </div>
@@ -83,7 +86,9 @@ const department = departmentStore();
 const userSt = userStore()
 const email = ref("admin@gmail.com");
 const password = ref("password");
-const isLogin = ref(true); // Sử dụng `ref` để làm trạng thái động
+const isLogin = ref(true);
+const isPasswordVisible = ref(false)
+const iconEye = ref(true)
 const registerData = ref({
   name: "",
   email: "",
@@ -91,6 +96,11 @@ const registerData = ref({
   phone: "",
   department: "",
 });
+//show pass
+const toggleShowPass = () => {
+  isPasswordVisible.value = !isPasswordVisible.value;
+  iconEye.value = !iconEye.value;
+}
 // Validation errors
 const errors = reactive({
     name: null,

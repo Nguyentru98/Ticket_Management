@@ -52,4 +52,22 @@ class TicketController extends Controller
         $this->ticketServices->assignTo($request);
         return response()->json(['message' => 'Ticket updated successfully controller']);
     }
+    // delete ticket
+    public function deleteTicket($idTicket) {
+        $this->ticketServices->deleteTicket($idTicket);
+    }
+    // delete ticket
+    public function updateTicket(Request $request) {
+        $this->ticketServices->updateTicket($request);
+    }
+    // find by id ticket
+    public function findById($idTicket) {
+        $ticket = $this->ticketServices->findById($idTicket);
+        return  $ticket;
+    }
+    // update status
+    public function updateStatus(Request $request) {
+        $status = $this->ticketServices->updateStatus($request);
+        return  $status;
+    }
 }

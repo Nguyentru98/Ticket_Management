@@ -1,6 +1,5 @@
 import HomePage from '@/pages/HomePage.vue';
 import Report from "@/pages/Report.vue";
-import CreateTicket from "@/pages/CreateTicket.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
 import UserList from '@/pages/UserList.vue';
 import Error from '@/pages/Error.vue';
@@ -20,10 +19,6 @@ const routes = [
             {
                 path: '/', // Đường dẫn đầy đủ: "/hrm/user"
                 component: HomePage,
-            },
-            {
-                path: 'createTicket', // Đường dẫn đầy đủ: "/createTicket"
-                component: CreateTicket,
             },
             {
                 path: 'report', // Đường dẫn đầy đủ: "/report"

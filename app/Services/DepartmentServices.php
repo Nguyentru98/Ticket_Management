@@ -11,4 +11,8 @@ class DepartmentServices
     public function getListDepartment() {
         return Department::all();
     }
+    // get derpartment by id
+    public function getDepartMentById($id) {
+        return Department::find($id);
+    }
 }

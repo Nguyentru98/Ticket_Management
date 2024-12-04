@@ -17,10 +17,7 @@ const logout = () => {
           <img src="/images/logo.png" alt="" style="width: 100px" />
         </li>
         <li>
-          <router-link to="/">Danh sách ticket</router-link>
-        </li>
-        <li>
-          <router-link to="/createTicket">Tạo Ticket</router-link>
+          <router-link to="/">Ticket</router-link>
         </li>
         <li>
           <router-link to="/report">Báo cáo</router-link>

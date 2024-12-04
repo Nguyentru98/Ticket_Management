@@ -4,8 +4,10 @@ use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\UserController;
+use App\Models\Categori;
 use App\Models\Department;
 use App\Models\Ticket;
 
@@ -44,4 +46,16 @@ Route::post('/assignTo', [TicketController::class, 'assignTo']);
 Route::post('/register', [UserController::class, 'register']);
 // get list department
 Route::get('/listDepartment', [DepartmentController::class, 'getListDepartment']);
+// delete ticket
+Route::get('/delete/ticket/{idTicket}', [TicketController::class, 'deleteTicket']);  
+// update ticket
+Route::post('/update/ticket', [TicketController::class, 'updateTicket']);  
+// update ticket
+Route::get('/find/ticket/{idTicket}', [TicketController::class, 'findById']);  
+// update status ticket
+Route::post('/update/status/ticket', [TicketController::class, 'updateStatus']);  
+// update status ticket
+Route::get('/listCategories', [CategoriesController::class, 'listCategories']);  
+// get department by id
+Route::get('/getDepartMentById/{id}', [DepartmentController::class, 'getDepartMentById']);  
 

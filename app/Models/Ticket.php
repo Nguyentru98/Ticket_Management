@@ -17,6 +17,7 @@ class Ticket extends Model
         'user_id',
         'priority',
         'assigned_to',
+        'status',
     ];
     
     public function assignedTo() : BelongsTo {

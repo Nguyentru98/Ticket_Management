@@ -33,13 +33,11 @@ export const userStore  = defineStore('user', {
         },
         async assignTo(event, ticket_id) {
             const selectedUserId = event.target.value; // Lấy user_id từ option được chọn
-            // Hiển thị hộp thoại xác nhận
             const confirmAssign = confirm(
               'Bạn có chắc chắn muốn thực hiện thao tác này ?'
             );
-          
+            // Nếu người dùng xác nhận thực hiện cập nhật
             if (confirmAssign) {
-              // Nếu người dùng xác nhận
               await api.post('/assignTo', {
                 ticket_id: Number(ticket_id),
                 assigned_to: Number(selectedUserId)

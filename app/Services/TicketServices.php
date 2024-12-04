@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 
 class TicketServices
 {
-    // get list ticket
+    // create ticket
     public function createTicket(Request $request)
     {
+        $request->validate([
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+            'department_id'=>'required',
+            'category_id'=>'required',
+            'user_id'=>'required',
+            'priority'=>'nullable',
+            'assigned_to'=> 'nullable',
+        ]);
         Ticket::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -17,6 +26,7 @@ class TicketServices
             'category_id' => $request->category_id,
             'user_id' => $request->user_id,
             'priority' => $request->priority,
+            'status' => 0,
         ]);
     }
     // assignTo 
@@ -41,5 +51,49 @@ class TicketServices
     {
 
         return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->get();
+    }
+    public function deleteTicket($idTicket)
+    {
+        return Ticket::find($idTicket)->delete();
+    }
+    public function findById($idTicket)
+    {
+        $ticket = Ticket::find($idTicket);
+        return $ticket;
+    }
+    public function updateStatus(Request $request) {
+        $ticket = Ticket::find($request->id);
+        $request->validate([
+            'id' => 'required|exists:tickets,id',
+            'status' => 'required|integer',
+        ]);
+        if (!$ticket) {
+            return response()->json([
+                'message' => 'Ticket not found'
+            ], 404);
+        }
+        $ticket->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'ticket' => $ticket
+        ]);
+    }
+    public function updateTicket($request)
+    {
+        $ticket = Ticket::find($request->id);
+        $validatedData = $request->validate([
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+            'department_id'=>'required',
+            'category_id'=>'required',
+            'user_id'=>'required',
+            'priority'=>'nullable',
+            'assigned_to'=> 'nullable',
+        ]);
+        $ticket->update($validatedData);
+        return  response()->json(['message' => 'Ticket update successfully']);
     }
 }

@@ -16,5 +16,10 @@ class DepartmentController extends Controller
         $data = $this->departmentServices->getListDepartment();
         return response()->json($data);
     }
+    //get list department
+    public function getDepartMentById($id) {
+        $department = $this->departmentServices->getDepartMentById($id);
+        return response()->json($department);
+    }
     
 }
