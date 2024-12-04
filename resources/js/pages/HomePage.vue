@@ -23,10 +23,10 @@ const priority_level = ["low", "medium", "high"];
 const formData = reactive({
   title: "",
   description: "",
-  department_id: null,
+  department_id: userLogin?.department_id || null,
   category_id: null ,
   priority: null,
-  user_id: null,
+  user_id: userLogin.id,
   id:null,
 });
 const activeTab = ref('list');
@@ -35,10 +35,10 @@ const isEditMode = ref(false); // false: Tạo mới, true: Chỉnh sửa
 const resetForm = () => {
   formData.title = "";
   formData.description = "";
-  formData.department_id = null;
+  formData.department_id = userLogin?.department_id || null;
   formData.category_id = null;
   formData.priority = null;
-  formData.user_id = null;
+  formData.user_id = userLogin.id;
   formData.id = null;
 };
 
@@ -162,6 +162,7 @@ onMounted(() => {
             <th>Tiêu đề</th>
             <th>Người yêu cầu</th>
             <th>Danh mục</th>
+            <th>Mô tả</th>
             <th>Bộ phận xử lý</th>
             <th>Người xử lý</th>
             <th>Độ ưu tiên</th>
@@ -176,6 +177,11 @@ onMounted(() => {
             <td>{{ ticket.title }}</td>
             <td>{{ ticket.user?.name || "" }}</td>
             <td>{{ ticket.category?.categories_name || "" }}</td>
+            <td>
+              <div class="text-limited" data-bs-toggle="tooltip" data-bs-placement="top" :title="ticket.description">
+                {{ ticket.description|| "" }}
+              </div>
+            </td>
             <td>{{ ticket.department?.department_name || "" }}</td>
             <td>
               <div class="" v-if="ticket.status === 2">
@@ -207,29 +213,11 @@ onMounted(() => {
             <div class="p-3">
               <div class="select-input mb-2">
                 <label class="py-2">Phòng ban <span class="obligatory">*</span></label>
-                <select
-                  class="form-select"
-                  aria-label="Default select example"
-                  v-model="formData.department_id"
-                >
-                  <option value="" disabled selected>
-                    -- Select an option --
-                  </option>
-                  <option v-for="(item ,index) in priority_level" :key="index" :value="index">{{ item }}</option>
-                </select>
+                <div class="form-control">{{ departmentSt.departmentName }}</div>
               </div>
               <div class="select-input mb-2">
                 <label class="py-2">Người yêu cầu<span class="obligatory">*</span></label>
-                <select
-                  class="form-select"
-                  aria-label="Default select example"
-                  v-model="formData.user_id"
-                >
-                  <option value="" disabled selected>
-                    -- Select an option --
-                  </option>
-                  <option v-for="(item ,index) in priority_level" :key="index" :value="index">{{ item }}</option>
-                </select>
+               <div class="form-control">{{ userLogin?.name }}</div>
               </div>
               <div class="select-input mb-2">
                 <label class="py-2">Độ ưu tiên <span class="obligatory">*</span></label>
@@ -342,5 +330,12 @@ th {
 }
 .obligatory {
   color: red;
+}
+.text-limited {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* Giới hạn chiều rộng */
+  cursor: pointer;
 }
 </style>

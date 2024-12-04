@@ -24,8 +24,8 @@ class FormDataRequest extends FormRequest
         return [
             'title'=>'required|string',
             'description'=>'required|string',
-            'department_id'=>'required|string',
-            'category_id'=>'required|string',
+            'department_id'=>'required',
+            'category_id'=>'required',
             'priority'=>'required|string',
         ];
     }

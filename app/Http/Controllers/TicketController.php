@@ -38,7 +38,7 @@ class TicketController extends Controller
         return response()->json($dataList);
     }
     // create ticket
-    public function createTicket(FormDataRequest $request)
+    public function createTicket(Request $request)
     {
         $this->authorize('create', Ticket::class); // Kiểm tra quyền qua Policy
 
