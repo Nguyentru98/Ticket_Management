@@ -42,7 +42,7 @@ export const userStore  = defineStore('user', {
                 ticket_id: Number(ticket_id),
                 assigned_to: Number(selectedUserId)
               });
-              window.location.reload();
+              // window.location.reload();
             } else {
               event.target.value = ""; // Reset lại giá trị trong select
             }

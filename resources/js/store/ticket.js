@@ -42,7 +42,7 @@ export const ticketStore = defineStore("ticket", {
         async updateStatus(ticket){
             try {
                 await api.post("update/status/ticket", ticket);
-                window.location.reload();
+                // window.location.reload();
             } catch (error) {
                 console.log(error);
             }

@@ -65,13 +65,6 @@ class UserServices
             'department' => 'required|numeric',
         ]);
 
-        // User::create([
-        //     'name' => $request->name, // Đảm bảo sử dụng đúng tên trường
-        //     'phone' => $request->phone,
-        //     'password' => Hash::make($request->password),
-        //     'email' => $request->email,
-        //     'department_id' => $request->department,
-        // ]);
         try {
             $user = User::create([
                 'name' => $validatedData['name'],

@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\mailAssignTo;
+use App\Mail\TicketNotification;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
 class TicketServices
 {
@@ -19,7 +23,7 @@ class TicketServices
             'priority'=>'nullable',
             'assigned_to'=> 'nullable',
         ]);
-        Ticket::create([
+        $ticket = Ticket::create([
             'title' => $request->title,
             'description' => $request->description,
             'department_id' => $request->department_id,
@@ -28,6 +32,10 @@ class TicketServices
             'priority' => $request->priority,
             'status' => 0,
         ]);
+        $user = User::find($request->user_id);
+        Mail::to('trunv98@gmail.com')->send(new TicketNotification($ticket,$user));
+
+        return response()->json(['message' => 'Ticket đã được tạo và thông báo đã được gửi.'], 200);
     }
     // assignTo 
     public function assignTo(Request $request)
@@ -39,6 +47,10 @@ class TicketServices
 
         $ticket = Ticket::find($request->ticket_id);
         $ticket->update(['assigned_to' => $request->assigned_to]);
+        $userHandler = User::find($request->assigned_to);
+        $requester = User::find($ticket->user_id);
+        // dd($ticket,$userHandler,$requester);
+        Mail::to($userHandler->email)->send(new mailAssignTo($ticket,$userHandler,$requester));
 
         return response()->json(['message' => 'Ticket assigned successfully']);
     }

@@ -58,4 +58,6 @@ Route::post('/update/status/ticket', [TicketController::class, 'updateStatus']);
 Route::get('/listCategories', [CategoriesController::class, 'listCategories']);  
 // get department by id
 Route::get('/getDepartMentById/{id}', [DepartmentController::class, 'getDepartMentById']);  
+// get department by id
+Route::get('/sendMailTicket', [TicketController::class, 'sendMailTicket']);  
 

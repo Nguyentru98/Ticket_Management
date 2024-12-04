@@ -17,10 +17,6 @@ class TicketController extends Controller
         $this->ticketServices = $ticketServices;
     }
     //list ticket
-    // public function getTicket() {
-    //     $dataList  = $this->ticketServices->getTicket();
-    //     return response()->json($dataList);
-    // }
     public function getTicket()
     {
         // Lấy user đang đăng nhập
@@ -70,4 +66,5 @@ class TicketController extends Controller
         $status = $this->ticketServices->updateStatus($request);
         return  $status;
     }
+  
 }

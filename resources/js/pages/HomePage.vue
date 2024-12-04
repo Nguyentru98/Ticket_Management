@@ -17,6 +17,7 @@ const statusTexts = {
   0: "Pending",
   1: "In Progress",
   2: "Completed",
+  3: "Canceled",
 };
 const priority_level = ["low", "medium", "high"];
 // form data
