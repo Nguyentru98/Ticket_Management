@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Mail\mailAssignTo;
-use App\Mail\TicketNotification;
+use App\Mail\NewTicket;
+use App\Mail\TicketAssignee;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -16,7 +16,7 @@ class TicketServices
     {
         $request->validate([
             'title' => 'string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|nullable|string',
             'department_id'=>'required',
             'category_id'=>'required',
             'user_id'=>'required',
@@ -33,7 +33,7 @@ class TicketServices
             'status' => 0,
         ]);
         $user = User::find($request->user_id);
-        Mail::to('trunv98@gmail.com')->send(new TicketNotification($ticket,$user));
+        Mail::to('trunv98@gmail.com')->send(new NewTicket($ticket,$user));
 
         return response()->json(['message' => 'Ticket đã được tạo và thông báo đã được gửi.'], 200);
     }
@@ -50,7 +50,8 @@ class TicketServices
         $userHandler = User::find($request->assigned_to);
         $requester = User::find($ticket->user_id);
         // dd($ticket,$userHandler,$requester);
-        Mail::to($userHandler->email)->send(new mailAssignTo($ticket,$userHandler,$requester));
+        Mail::to($userHandler->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"userHandler"));
+        Mail::to($requester->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"requester"));
 
         return response()->json(['message' => 'Ticket assigned successfully']);
     }

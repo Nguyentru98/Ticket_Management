@@ -8,10 +8,14 @@ import { categoriesStore } from "../store/categories";
 import { departmentStore } from "../store/department";
 
 const userLogin = JSON.parse(localStorage.getItem('user'))
+const roles = userLogin.roles;
 const ticket = ticketStore();
 const user = userStore();
 const categoriesSt = categoriesStore()
 const departmentSt = departmentStore()
+const isAdmin = roles.find(role => role.name === 'admin') !== undefined;
+const isUser = roles.find(role => role.name === 'user') !== undefined;
+const isSuport = roles.find(role => role.name === 'suport') !== undefined;
 
 const statusTexts = {
   0: "Pending",
@@ -19,7 +23,11 @@ const statusTexts = {
   2: "Completed",
   3: "Canceled",
 };
-const priority_level = ["low", "medium", "high"];
+const priority_level = [
+  { id: 0, name: "Low" },
+  { id: 1, name: "Medium" },
+  { id: 2, name: "High" }
+];
 // form data
 const formData = reactive({
   title: "",
@@ -58,6 +66,7 @@ const openCreateForm = () => {
 
 // Hàm mở form chỉnh sửa
 const openEditForm = (ticket,idTicket) => {
+console.log(ticket,"edit form")
   formData.title = ticket.title || "";
   formData.description = ticket.description || "";
   formData.department_id = ticket.department_id || null;
@@ -132,8 +141,8 @@ const getDepartmentById = ($id) => {
 onMounted(() => {
   ticket.loadData();
   user.getUserPCN();
-  categoriesSt.listCategories()
-  getDepartmentById(userLogin.department_id)
+  categoriesSt.listCategories();
+  getDepartmentById(userLogin.department_id);
 });
 </script>
 
@@ -185,10 +194,10 @@ onMounted(() => {
             </td>
             <td>{{ ticket.department?.department_name || "" }}</td>
             <td>
-              <div class="" v-if="ticket.status === 2">
-               {{ ticket.assigned_to?.name || "null" }}
+              <div class="" v-if="!isAdmin">
+               {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
               </div>
-              <div v-if="ticket.status === 1 || ticket.status === 0 ">
+              <div v-if="(ticket.status === 1 || ticket.status === 0) && isAdmin ">
                 <select class="form-select" @change="assignTo($event, ticket.id)">
                   <option disabled selected>Assign to</option>
                   <option v-for="user in user.listUser" :key="user.id" :value="user.id" :selected="ticket.assigned_to?.id === user.id">
@@ -197,7 +206,7 @@ onMounted(() => {
                 </select>
               </div>
             </td>
-            <td>{{ priority_level[ticket.priority] }}</td>
+            <td>{{ priority_level[ticket.priority].name }}</td>
             <td>{{ formatDate(ticket.updated_at) }}</td>
             <td>{{ statusTexts[ticket.status] }}</td>
             <td>
@@ -227,11 +236,17 @@ onMounted(() => {
                   aria-label="Default select example"
                   v-model="formData.priority"
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     -- Select an option --
                   </option>
-                  <option v-for="(item ,index) in priority_level" :key="index" :value="index">{{ item }}</option>
+                  <option 
+                    v-for="(item) in priority_level" 
+                    :key="item.id" 
+                    :value="item.id">
+                    {{ item.name }}
+                  </option>
                 </select>
+
               </div>
               <div class="select-input mb-2">
             <label class="py-2">Danh mục<span class="obligatory">*</span></label>
@@ -268,7 +283,7 @@ onMounted(() => {
                   />
                 </div>
                 <div class="">
-                  <label class="mb-2">Mô tả</label>
+                  <label class="mb-2">Mô tả <span class="obligatory">*</span></label>
                   <div>
                     <textarea
                       class="form-control"

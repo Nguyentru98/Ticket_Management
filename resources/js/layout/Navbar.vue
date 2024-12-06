@@ -4,6 +4,9 @@ import { useAuthStore } from "../store/auth";
 
 const authStore = useAuthStore();
 const user = JSON.parse(localStorage.getItem('user'))
+const roles = user.roles;
+const isAdmin = roles.find(role => role.name === 'admin') !== undefined;
+
 const logout = () => {
     authStore.logout();
 };
@@ -22,7 +25,7 @@ const logout = () => {
         <li>
           <router-link to="/report">Báo cáo</router-link>
         </li>
-        <li>
+        <li v-if="isAdmin">
           <router-link to="/listUser">Quản trị người dùng</router-link>
         </li>
       </ul>

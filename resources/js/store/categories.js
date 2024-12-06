@@ -12,7 +12,6 @@ export const categoriesStore  = defineStore('categories', {
             const res = await api.get("/listCategories");
             let { data } = res;
             this.list = data;
-            console.log(res,"categories")
         },
     }
 })

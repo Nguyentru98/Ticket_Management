@@ -9,21 +9,22 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class mailAssignTo extends Mailable
+class NewTicket extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $ticket;
-    public $userHandler;
-    public $requester;
+    public $user;
+    
+
     /**
      * Create a new message instance.
      */
-    public function __construct($ticket,$userHandler,$requester)
+    public function __construct($ticket,$user)
+    
     {
-         // Lưu dữ liệu để truyền qua view
         $this->ticket = $ticket;
-        $this->userHandler = $userHandler;
-        $this->requester = $requester;
+        $this->user = $user;
     }
 
     /**
@@ -32,20 +33,23 @@ class mailAssignTo extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Yêu cầu hỗ trợ được Admin giao cho bạn !',
+            subject: 'Yêu cầu hỗ trợ từ người dùng',
         );
     }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
+    public function build()
     {
-        return new Content(
-            view: 'mailAssignTo',
-        );
-    }
+        // Lấy email người dùng đăng nhập
+        $userEmail = auth()->user()->email;
 
+        return $this->from($userEmail) // Email người gửi
+                    ->subject('Thông báo Ticket mới')
+                    ->view('mail.ticket_admin');
+                    
+    }
     /**
      * Get the attachments for the message.
      *
