@@ -66,7 +66,6 @@ const openCreateForm = () => {
 
 // Hàm mở form chỉnh sửa
 const openEditForm = (ticket,idTicket) => {
-console.log(ticket,"edit form")
   formData.title = ticket.title || "";
   formData.description = ticket.description || "";
   formData.department_id = ticket.department_id || null;
@@ -82,11 +81,9 @@ console.log(ticket,"edit form")
 const saveTicket = async () => {
   try {
     if (isEditMode.value) {
-      console.log(formData,"formdata - edit")
       await ticket.updateTicket(formData);
       console.log("Ticket updated successfully");
     } else {
-      console.log(formData,"formdata - tạo")
       await ticket.createTicket(formData);
       console.log("Ticket created successfully");
     }
@@ -259,9 +256,9 @@ onMounted(() => {
                 -- Select an option --
               </option>
               <option 
-                v-for="(category, index) in categoriesSt.list" 
-                :key="index" 
-                :value="index">
+                v-for="(category) in categoriesSt.list" 
+                :key="category.id" 
+                :value="category.id">
                 {{ category.categories_name }}
               </option>
             </select>

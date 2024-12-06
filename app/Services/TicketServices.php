@@ -50,7 +50,7 @@ class TicketServices
         $userHandler = User::find($request->assigned_to);
         $requester = User::find($ticket->user_id);
         // dd($ticket,$userHandler,$requester);
-        Mail::to($userHandler->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"userHandler"));
+        Mail::to($userHandler->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"userSuport"));
         Mail::to($requester->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"requester"));
 
         return response()->json(['message' => 'Ticket assigned successfully']);

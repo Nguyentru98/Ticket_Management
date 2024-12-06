@@ -25,14 +25,14 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login successful',
                 'token' => $token,
-                'user' => $user, // Nếu muốn trả thêm thông tin người dùng
-                'roles' => $roles, // Nếu muốn trả thêm thông tin người dùng
+                'user' => $user,
+                'roles' => $roles, 
             ], 200);
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
-
+    // check login
     // public function login(Request $request)
     // {
     // // Xác thực thông tin đăng nhập
@@ -77,7 +77,6 @@ class AuthController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return response()->json(['message' => 'Logout successful'], 200);
     }
 

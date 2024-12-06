@@ -31,12 +31,12 @@ class TicketAssignee extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Yêu cầu hỗ trợ được Admin giao cho bạn !',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Yêu cầu hỗ trợ được Admin giao cho bạn !',
+    //     );
+    // }
 
     /**
      * Get the message content definition.
@@ -52,7 +52,7 @@ class TicketAssignee extends Mailable
         if ($this->recipientType === 'requester') {
             return $this->subject('Ticket của bạn đã được xử lý')
                         ->view('mail.ticket_requester');
-        } elseif ($this->recipientType === 'userHandler') {
+        } elseif ($this->recipientType === 'userSuport') {
             return $this->subject('Bạn được phân công xử lý Ticket')
                         ->view('mail.ticket_assignee');
         }
