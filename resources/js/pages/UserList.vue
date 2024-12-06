@@ -4,7 +4,15 @@ import { onMounted } from "vue";
 import { userStore } from "../store/user";
 
 const users = userStore();
-
+const listRole = [
+  {id:1, name:"admin"},
+  {id:2, name:"user"},
+  {id:3, name:"suport"},
+]
+const role = ref()
+const handleRole = (event)=>{
+    console.log(event.target.value)
+}
 onMounted(() => {
   users.getAllUser();
 });
@@ -19,7 +27,7 @@ onMounted(() => {
           <th>Email</th>
           <th>Phone</th>
           <th>Phòng ban</th>
-          <th>Phân quyền</th>
+          <th>Vai trò</th>
           <th>Chức năng</th>
           <th>Khóa tài khoản</th>
         </tr>
@@ -32,17 +40,19 @@ onMounted(() => {
           <td>{{ user.phone }}</td>
           <td>{{ user.department?.department_name || "No Department" }}</td>
           <td>
-            <div v-if="user.role">
-                {{ ticket.role?.name || "null" }}
+            <div class="" v-if="Array.isArray(user.roles) && user.roles.length > 0">
+              <div v-for="(role) in user.roles" :key="role.id" :value="role.id">
+                {{ user.name }}
               </div>
-              <div v-else>
-                <select class="form-select" @change="user.assignTo($event, ticket.id)">
-                  <option disabled selected>--select--</option>
-                  <option v-for="(user) in user.listUser" :key="user.id" :value="user.id">
-                    {{ user.name }}
+            </div>
+            <div v-else>
+              <select class="form-select" @change="handleRole($event)">
+                  <option disabled selected>-- Select an option --</option>
+                  <option v-for="(role) in listRole" :key="role.id" :value="role.id">
+                    {{ role.name }}
                   </option>
-                </select>
-              </div>
+              </select>
+            </div>
           </td>
           <td>
             <span class="pi pi-trash px-2"></span>

@@ -11,6 +11,7 @@
     <p><strong>Tiêu đề:</strong>  <span>{{$ticket->title}}</span></p>
     <p><strong>Mô tả:</strong> {{$ticket->description}}</p>
     <p><strong>Ngày gửi yêu cầu: </strong>{{$ticket->created_at}}</p>
+    <p><strong>Trạng thái: </strong>{{$ticket->status}}</p>
     <p>Vui lòng xem xét và phê duyệt yêu cầu này. Nếu cần thêm thông tin hoặc tài liệu, bạn có thể liên hệ trực tiếp với <strong>{{$user->name}}</strong> qua email: {{$user->email}}</p>
     <br>
     <p>Cảm ơn sự hỗ trợ của bạn!</p>

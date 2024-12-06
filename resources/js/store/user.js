@@ -9,11 +9,10 @@ export const userStore  = defineStore('user', {
     }),
     actions: {
         async getAllUser() {
-            this.listUser = [];
             const res = await api.get('/getUser');
             let { data } = res
             this.listUser = data.original;
-            console.log(this.listUser,"listUser")
+            console.log(this.listUser)
         },
         async getUser() {
             const res = await api.get('/getUser',{
@@ -27,7 +26,6 @@ export const userStore  = defineStore('user', {
         },
         async getUserPCN() {
             const res = await api.get('/getUserPCN');
-            
             let { data } = res
             this.listUser = data;
         },
@@ -42,7 +40,7 @@ export const userStore  = defineStore('user', {
                 ticket_id: Number(ticket_id),
                 assigned_to: Number(selectedUserId)
               });
-              // window.location.reload();
+              window.location.reload();
             } else {
               event.target.value = ""; // Reset lại giá trị trong select
             }

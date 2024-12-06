@@ -49,9 +49,19 @@ class TicketController extends Controller
         return response()->json(['message' => 'Ticket updated successfully controller']);
     }
     // delete ticket
-    public function deleteTicket($idTicket) {
+    public function deleteTicket($idTicket)
+    {
+        $ticket = Ticket::findOrFail($idTicket);
+
+        // Kiểm tra quyền
+        $this->authorize('delete', $ticket);
+
+        // Gọi Service để xử lý xóa
         $this->ticketServices->deleteTicket($idTicket);
+
+        return response()->json(['message' => 'Ticket deleted successfully.']);
     }
+
     // delete ticket
     public function updateTicket(Request $request) {
         $this->ticketServices->updateTicket($request);

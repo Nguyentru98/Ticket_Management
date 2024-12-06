@@ -50,7 +50,7 @@ class TicketAssignee extends Mailable
     public function build()
     {
         if ($this->recipientType === 'requester') {
-            return $this->subject('Ticket của bạn đã được xử lý')
+            return $this->subject('Ticket của bạn đang được xử lý')
                         ->view('mail.ticket_requester');
         } elseif ($this->recipientType === 'userSuport') {
             return $this->subject('Bạn được phân công xử lý Ticket')

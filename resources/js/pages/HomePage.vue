@@ -16,12 +16,13 @@ const departmentSt = departmentStore()
 const isAdmin = roles.find(role => role.name === 'admin') !== undefined;
 const isUser = roles.find(role => role.name === 'user') !== undefined;
 const isSuport = roles.find(role => role.name === 'suport') !== undefined;
+const isCompleted = ref(false)
 
 const statusTexts = {
   0: "Pending",
   1: "In Progress",
   2: "Completed",
-  3: "Canceled",
+  3: "closed",
 };
 const priority_level = [
   { id: 0, name: "Low" },
@@ -109,13 +110,37 @@ const findTicketById = async (idTicket) => {
 };
 
 // xóa ticket
-const deleteTicket = (idTicket) => {
-  if (confirm("Bạn có chắc chắn muốn xóa không?")) {
-        ticket.deleteTicket(idTicket);
-      } else {
-        console.log("Hủy xóa!");
-      }
-}
+// const deleteTicket = (idTicket) => {
+//   if (confirm("Bạn có chắc chắn muốn xóa không?")) {
+//         ticket.deleteTicket(idTicket);
+//       } else {
+//         console.log("Hủy xóa!");
+//       }
+// }
+const deleteTicket = async (idTicket) => {
+  const isConfirmed = confirm("Bạn có chắc chắn muốn xóa không?");
+  if (!isConfirmed) {
+    console.log("Hủy xóa!");
+    return;
+  }
+
+  try {
+    // Gọi API xóa
+    await ticket.deleteTicket(idTicket);
+    alert("Xóa ticket thành công!");
+    // Cập nhật giao diện nếu cần
+  } catch (error) {
+    console.error(error);
+    if (error.response?.status === 403) {
+      alert("Bạn không có quyền xóa ticket này.");
+    } else if (error.response?.status === 404) {
+      alert("Ticket không tồn tại.");
+    } else {
+      alert("Đã xảy ra lỗi, vui lòng thử lại.");
+    }
+  }
+};
+
 // format date
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -134,6 +159,19 @@ const assignTo = ($event, idTicket) => {
 // lấy danh sách phòng ban
 const getDepartmentById = ($id) => {
   departmentSt.getDepartMentById($id)
+}
+// it suport xác nhận hoàn thành
+const completedHandle = (idTicket)=>{
+  const payload = {
+    "id":idTicket,
+    "status":3,
+  }
+  if (confirm("Bạn chắc chắn đã hoàn thành ticket này ?") == true) {
+    ticket.updateStatus(payload)
+    window.location.reload();
+  } else {
+    text = "You canceled!";
+  }
 }
 onMounted(() => {
   ticket.loadData();
@@ -175,6 +213,7 @@ onMounted(() => {
             <th>Độ ưu tiên</th>
             <th>Ngày cập nhật</th>
             <th>Trạng thái</th>
+            <th>Xác nhận hoàn thành</th>
             <th>Chức năng</th>
           </tr>
         </thead>
@@ -206,6 +245,11 @@ onMounted(() => {
             <td>{{ priority_level[ticket.priority].name }}</td>
             <td>{{ formatDate(ticket.updated_at) }}</td>
             <td>{{ statusTexts[ticket.status] }}</td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" :checked="ticket.status === 3" value="" id="flexCheckIndeterminate" @click="completedHandle(ticket.id) ">
+              </div>
+            </td>
             <td>
               <span class="pi pi-trash px-2" @click="deleteTicket(ticket.id)"></span>
               <span class="pi pi-file-edit px-2" @click="findTicketById(ticket.id)"></span>
@@ -252,7 +296,7 @@ onMounted(() => {
               aria-label="Default select example"
               v-model="formData.category_id"
             >
-              <option value="" disabled>
+              <option value="" selected disabled>
                 -- Select an option --
               </option>
               <option 
@@ -262,47 +306,46 @@ onMounted(() => {
                 {{ category.categories_name }}
               </option>
             </select>
-</div>
-
-            </div>
-          </div>
-          <div class="col-lg-8 border">
-            <div class="p-3 d-flex flex-column justify-content-between">
-              <div class="">
-                <div class="mb-2">
-                  <label class="py-2"
-                    >Tiêu đề <span class="obligatory">*</span></label
-                  >
-                  <input
-                    class="form-control"
-                    placeholder="Tiêu đề"
-                    v-model="formData.title"
-                  />
-                </div>
-                <div class="">
-                  <label class="mb-2">Mô tả <span class="obligatory">*</span></label>
-                  <div>
-                    <textarea
-                      class="form-control"
-                      placeholder="Nội dung..."
-                      v-model="formData.description"
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-3">
-                <button
-                  type="submit"
-                  @click="saveTicket"
-                  class="btn btn-primary"
-                >
-                  {{isEditMode?'Cập nhật':'Tạo mới'}}
-                </button>
-              </div>
-            </div>
           </div>
         </div>
+      </div>
+      <div class="col-lg-8 border">
+        <div class="p-3 d-flex flex-column justify-content-between">
+          <div class="">
+            <div class="mb-2">
+              <label class="py-2"
+                >Tiêu đề <span class="obligatory">*</span></label
+              >
+              <input
+                class="form-control"
+                placeholder="Tiêu đề"
+                v-model="formData.title"
+              />
+            </div>
+            <div class="">
+              <label class="mb-2">Mô tả <span class="obligatory">*</span></label>
+              <div>
+                <textarea
+                  class="form-control"
+                  placeholder="Nội dung..."
+                  v-model="formData.description"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button
+              type="submit"
+              @click="saveTicket"
+              class="btn btn-primary"
+            >
+              {{isEditMode?'Cập nhật':'Tạo mới'}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
       </div>
       <!-- phân trang -->
       <div class="d-flex justify-content-center align-items-center">

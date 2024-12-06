@@ -33,9 +33,9 @@ api.interceptors.response.use(
             localStorage.removeItem("authToken");
             router.push({ name: 'Login' });
         }
-        if (error.response && error.response.status === 403) {
-            window.location.href = '/forbidden';
-        }
+        // if (error.response && error.response.status === 403) {
+        //     window.location.href = '/forbidden';
+        // }
         return Promise.reject(error);
     }
 );

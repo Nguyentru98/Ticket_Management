@@ -26,15 +26,14 @@ class TicketPolicy
     }
     public function create(User $user): bool
     {
-        return $user->roles()->whereIn('name', ['user', 'admin'])->exists();
+        return $user->roles()->whereIn('name', ['user', 'admin','suport'])->exists();
     }
 
     public function delete(User $user, Ticket $ticket): bool
     {
-        if ($user->role === 'admin' || $user->role === 'user') {
+        if ($user->roles->contains('name', 'admin')) {
             return true;
         }
-
         // User chỉ có quyền xóa ticket của chính mình
         return $user->id === $ticket->user_id;
     }

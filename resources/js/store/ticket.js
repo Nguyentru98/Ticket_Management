@@ -11,6 +11,7 @@ export const ticketStore = defineStore("ticket", {
             const res = await api.get("/listTicket");
             let { data } = res;
             this.list = data;
+            console.log("list ticket", this.list)
         },
         async createTicket(formData) {
             try {

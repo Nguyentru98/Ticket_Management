@@ -67,7 +67,8 @@ class TicketServices
     }
     public function deleteTicket($idTicket)
     {
-        return Ticket::find($idTicket)->delete();
+        $ticket = Ticket::find($idTicket);
+        return  $ticket->delete();
     }
     public function findById($idTicket)
     {
@@ -96,6 +97,7 @@ class TicketServices
     }
     public function updateTicket($request)
     {
+        dd($request);
         $ticket = Ticket::find($request->id);
         $validatedData = $request->validate([
             'title' => 'string|max:255',

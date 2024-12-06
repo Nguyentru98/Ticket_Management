@@ -28,11 +28,11 @@ const routes = [
                 path: 'listUser', // Đường dẫn đầy đủ: "/report"
                 component: UserList,
             },
-            {
-                path: 'forbidden', // Đường dẫn đầy đủ: "/report"
-                name: 'Forbidden',
-                component: Error,
-            },
+            // {
+            //     path: 'forbidden', // Đường dẫn đầy đủ: "/report"
+            //     name: 'Forbidden',
+            //     component: Error,
+            // },
         ]
     },
 ];

@@ -13,7 +13,6 @@ class UserServices
     {
         // $users = User::with(['department', 'assignedUser', 'tickets'])->get();
         // return $users;
-        
         // Nhận tham số từ request
         $id = $request->input('id'); // ID người dùng (tùy chọn)
         $fields = $request->input('fields', ['*']); // Các cột muốn lấy, mặc định lấy tất cả (*)
@@ -25,6 +24,7 @@ class UserServices
                 'department', 
                 'assignedUser',
                 'tickets',
+                'roles',
             ])
                 ->select($fields)  // Chỉ lấy các cột của bảng users
                 ->get();
