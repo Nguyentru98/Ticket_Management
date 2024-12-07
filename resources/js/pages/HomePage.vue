@@ -168,7 +168,7 @@ const completedHandle = (idTicket)=>{
   }
   if (confirm("Bạn chắc chắn đã hoàn thành ticket này ?") == true) {
     ticket.updateStatus(payload)
-    window.location.reload();
+    // window.location.reload();
   } else {
     text = "You canceled!";
   }
@@ -232,6 +232,9 @@ onMounted(() => {
             <td>
               <div class="" v-if="!isAdmin">
                {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
+              </div>
+              <div class="" v-else-if="isAdmin">
+               {{ ticket.assigned_to?.name}}
               </div>
               <div v-if="(ticket.status === 1 || ticket.status === 0) && isAdmin ">
                 <select class="form-select" @change="assignTo($event, ticket.id)">

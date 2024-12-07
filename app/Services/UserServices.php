@@ -11,8 +11,6 @@ class UserServices
     // get all user
     public function getUser(Request $request)
     {
-        // $users = User::with(['department', 'assignedUser', 'tickets'])->get();
-        // return $users;
         // Nhận tham số từ request
         $id = $request->input('id'); // ID người dùng (tùy chọn)
         $fields = $request->input('fields', ['*']); // Các cột muốn lấy, mặc định lấy tất cả (*)

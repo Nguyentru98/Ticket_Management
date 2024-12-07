@@ -13,7 +13,6 @@ class UserController extends Controller
     }
     //get user
     public function getUser(User $user, Request $request) {
-        $this->authorize('view', $user);
         $data = $this->userServices->getUser($request);
         return response()->json($data);
     }

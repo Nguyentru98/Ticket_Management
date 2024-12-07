@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\CloseTicket;
 use App\Mail\NewTicket;
 use App\Mail\TicketAssignee;
 use App\Models\Ticket;
@@ -89,6 +90,12 @@ class TicketServices
         $ticket->update([
             'status' => $request->status
         ]);
+        if ($ticket->status == 3) {
+            $ticket = Ticket::find($request->id);
+            $userSuport = User::find($ticket->assigned_to);
+            $requester = User::find($ticket->user_id);
+            Mail::to($requester->email)->send(new CloseTicket($ticket,$userSuport,$requester));
+        }
 
         return response()->json([
             'message' => 'Status updated successfully',
