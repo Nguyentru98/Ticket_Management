@@ -397,7 +397,7 @@ onMounted(() => {
       </div>
       <!-- phân trang -->
       <div class="d-flex justify-content-center align-items-center">
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" v-if="ticket.totalPages > 0">
           <ul class="pagination">
             <li class="page-item">
               <button class="page-link" aria-label="Previous" @click="prev" :disabled="params.page === 1">

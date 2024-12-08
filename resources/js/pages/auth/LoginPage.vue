@@ -7,12 +7,18 @@
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Enter username" required v-model="email">
+            <div v-if="errorsLogin.email" class="errors">
+              {{ errorsLogin.email }}
+            </div>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <div class="form-control">
               <input :type="isPasswordVisible ? 'text' : 'password'" id="password" placeholder="Enter password" required v-model="password" style="border: none;width: 90%;">
               <span :class="iconEye ? 'pi pi-eye':'pi pi-eye-slash'" @click="toggleShowPass"></span>
+            </div>
+            <div v-if="errorsLogin.password" class="errors">
+              {{ errorsLogin.password }}
             </div>
           </div>
           <button type="submit" class="btn btn-primary w-100">Login</button>
@@ -109,6 +115,10 @@ const errors = reactive({
     phone: null,
     department: null
 });
+const errorsLogin = reactive({
+    email: null,
+    password: null,
+});
 // chuyển đăng kí - đăng nhập
 const toggleForm = () => {
   isLogin.value = !isLogin.value; // Chuyển đổi giữa Login và Register
@@ -117,18 +127,43 @@ const toggleForm = () => {
     console.log(department.getData())
   }
 };
-//đăng nhập
-const handleLogin = () => {
+
+// login
+const handleLogin = async () => {
   try {
+    // Đặt lại lỗi về null trước khi gửi yêu cầu
+    errorsLogin.value = null;
+
     let payload = {
       email: email.value,
       password: password.value,
     };
-    store.login(payload);
+
+    // Gọi hàm đăng nhập từ store
+    await store.login(payload);
+
+    // Nếu đăng nhập thành công
+    console.log("Login successful");
   } catch (err) {
-    error.value = err.response?.data?.message || "Login failed"; // Lưu lỗi
+    console.log(err,"loi")
+    if (err.response && err.response.status === 422) {
+      const validationErrors = err.response.data.errors;
+      
+      // Đặt lỗi cụ thể cho từng trường hợp
+      Object.keys(validationErrors).forEach((field) => {
+        errorsLogin[field] = validationErrors[field][0]; // Chỉ hiển thị lỗi đầu tiên
+      });
+    } else {
+      // Lỗi không mong đợi
+      errorsLogin.value = {
+        global: "Đăng nhập thất bại. Vui lòng thử lại.",
+      };
+      console.error("Unexpected error:", err);
+    }
+     
   }
 };
+
 // đăng kí
 const submitRegister = async () => {
   try {
