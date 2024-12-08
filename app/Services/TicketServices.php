@@ -59,11 +59,10 @@ class TicketServices
 
     public function getAllTickets()
     {
-        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->get(); // Load thêm quan hệ nếu cần
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->paginate(2); 
     }
     public function getUserTickets($userId)
     {
-
         return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->get();
     }
     public function deleteTicket($idTicket)

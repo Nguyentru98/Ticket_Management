@@ -6,6 +6,7 @@ import { ticketStore } from "@/store/ticket";
 import { userStore } from "../store/user";
 import { categoriesStore } from "../store/categories";
 import { departmentStore } from "../store/department";
+import { watch } from "vue";
 
 const userLogin = JSON.parse(localStorage.getItem('user'))
 const roles = userLogin.roles;
@@ -109,14 +110,6 @@ const findTicketById = async (idTicket) => {
   }
 };
 
-// xóa ticket
-// const deleteTicket = (idTicket) => {
-//   if (confirm("Bạn có chắc chắn muốn xóa không?")) {
-//         ticket.deleteTicket(idTicket);
-//       } else {
-//         console.log("Hủy xóa!");
-//       }
-// }
 const deleteTicket = async (idTicket) => {
   const isConfirmed = confirm("Bạn có chắc chắn muốn xóa không?");
   if (!isConfirmed) {
@@ -173,8 +166,58 @@ const completedHandle = (idTicket)=>{
     text = "You canceled!";
   }
 }
+
+// paginate
+
+const params = reactive({
+    page: 1,
+    key: '',
+    current_page: 1,
+    sort_column: 'id',
+    direction: 'desc',
+})
+ 
+const buildParams = (params) => {
+  if (!params) {
+    return '';
+  }
+  let arr = [];
+  Object.keys(params).forEach((key) => {
+    if (params[key] !== undefined && params[key] !== '') { // Bỏ qua undefined và rỗng
+      arr.push(`${key}=${params[key]}`);
+    }
+  });
+  return '?' + arr.join('&');
+};
+
+
+const prev = () => {
+  if (params.page > 1) {
+    params.page--;
+    params.current_page--
+    const queryParams = buildParams(params);
+    console.log(queryParams)
+    ticket.loadData(queryParams);
+  }
+}
+const next = () => {
+  params.page++
+  params.current_page++
+  buildParams()
+  const queryParams = buildParams(params);
+  console.log(queryParams)
+  ticket.loadData(queryParams);
+}
+const goToPage = (page) => {
+  params.page = page;
+  console.log( params.page ,"param.page")
+  let param = buildParams(params)
+  ticket.loadData(param);
+};
+
 onMounted(() => {
-  ticket.loadData();
+  const queryParams = buildParams(params);
+  ticket.loadData(queryParams);           
   user.getUserPCN();
   categoriesSt.listCategories();
   getDepartmentById(userLogin.department_id);
@@ -198,6 +241,8 @@ onMounted(() => {
           <button class="btn btn-primary mx-2" @click="switchTab('list')">Danh sách Ticket</button>
           <button class="btn btn-primary" @click="openCreateForm" >Tạo Ticket</button>
         </div>
+
+        
       </div>
       <!--table list ticket-->
       <table v-if="activeTab === 'list'" class="table table-bordered border-primary">
@@ -355,17 +400,20 @@ onMounted(() => {
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+              <button class="page-link" aria-label="Previous" @click="prev" :disabled="params.page === 1">
                 <span aria-hidden="true">&laquo;</span>
+              </button>
+            </li>
+            <li class="page-item" v-for="page in ticket.totalPages" :key="page" @click="goToPage(page)" :class="{ active: params.page === page }">
+              <a class="page-link" >
+                {{ page }}
               </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+           
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+              <button class="page-link"  aria-label="Next" @click="next" :disabled="params.page === ticket.totalPages">
                 <span aria-hidden="true">&raquo;</span>
-              </a>
+              </button>
             </li>
           </ul>
         </nav>

@@ -1,17 +1,27 @@
 import { defineStore } from "pinia";
+import { ref, computed } from "vue";
 import api from "@/plugins/api";
 
 export const ticketStore = defineStore("ticket", {
     state: () => ({
         list: [],
         isLoading: false,
+        totalRecords: 0, // Tổng số bản ghi từ API
+        recordsPerPage: 2, // Số bản ghi mỗi trang
+        totalPages: 0, // Tổng số trang
     }),
+    
     actions: {
-        async loadData() {
-            const res = await api.get("/listTicket");
-            let { data } = res;
-            this.list = data;
-            console.log("list ticket", this.list)
+        async loadData(params) {
+            try {
+              const res = await api.get("/listTicket" + params);
+              this.list = res.data.data;
+              this.totalRecords = res.data.total; // Cập nhật tổng số bản ghi
+              this.totalPages = Math.ceil(this.totalRecords / this.recordsPerPage)
+              console.log(this.totalRecords,this.totalPages,"kkkkkkkk")
+            } catch (error) {
+              console.error("Error loading data:", error);
+            }
         },
         async createTicket(formData) {
             try {

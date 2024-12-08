@@ -26,6 +26,7 @@ class UserServices
             ])
                 ->select($fields)  // Chỉ lấy các cột của bảng users
                 ->get();
+                
 
             return response()->json($users, 200);
         }
