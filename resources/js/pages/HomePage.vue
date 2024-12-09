@@ -278,7 +278,7 @@ onMounted(() => {
               <div class="" v-if="!isAdmin">
                {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
               </div>
-              <div class="" v-else-if="isAdmin">
+              <div class="" v-else-if="isAdmin &&  ticket.status === 3">
                {{ ticket.assigned_to?.name}}
               </div>
               <div v-if="(ticket.status === 1 || ticket.status === 0) && isAdmin ">

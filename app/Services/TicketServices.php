@@ -93,7 +93,7 @@ class TicketServices
             $ticket = Ticket::find($request->id);
             $userSuport = User::find($ticket->assigned_to);
             $requester = User::find($ticket->user_id);
-            Mail::to($requester->email)->send(new CloseTicket($ticket,$userSuport,$requester));
+            // Mail::to($requester->email)->send(new CloseTicket($ticket,$userSuport,$requester));
         }
 
         return response()->json([
@@ -103,7 +103,6 @@ class TicketServices
     }
     public function updateTicket($request)
     {
-        dd($request);
         $ticket = Ticket::find($request->id);
         $validatedData = $request->validate([
             'title' => 'string|max:255',
