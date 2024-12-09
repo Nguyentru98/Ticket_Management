@@ -63,7 +63,7 @@ class TicketServices
     }
     public function getUserTickets($userId)
     {
-        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->get();
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->paginate(2);
     }
     public function deleteTicket($idTicket)
     {

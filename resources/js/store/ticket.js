@@ -18,7 +18,6 @@ export const ticketStore = defineStore("ticket", {
               this.list = res.data.data;
               this.totalRecords = res.data.total; // Cập nhật tổng số bản ghi
               this.totalPages = Math.ceil(this.totalRecords / this.recordsPerPage)
-              console.log(this.totalRecords,this.totalPages,"kkkkkkkk")
             } catch (error) {
               console.error("Error loading data:", error);
             }

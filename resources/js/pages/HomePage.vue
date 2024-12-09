@@ -258,7 +258,7 @@ onMounted(() => {
             <th>Độ ưu tiên</th>
             <th>Ngày cập nhật</th>
             <th>Trạng thái</th>
-            <th>Xác nhận hoàn thành</th>
+            <th v-if="isAdmin && isSuport">Xác nhận hoàn thành</th>
             <th>Chức năng</th>
           </tr>
         </thead>
@@ -293,7 +293,7 @@ onMounted(() => {
             <td>{{ priority_level[ticket.priority].name }}</td>
             <td>{{ formatDate(ticket.updated_at) }}</td>
             <td>{{ statusTexts[ticket.status] }}</td>
-            <td>
+            <td v-if="isAdmin && isSuport">
               <div class="form-check d-flex justify-content-center">
                 <input class="form-check-input" type="checkbox" :checked="ticket.status === 3" value="" id="flexCheckIndeterminate" @click="completedHandle(ticket.id) ">
               </div>
@@ -397,7 +397,7 @@ onMounted(() => {
       </div>
       <!-- phân trang -->
       <div class="d-flex justify-content-center align-items-center">
-        <nav aria-label="Page navigation example" v-if="ticket.totalPages > 0">
+        <nav aria-label="Page navigation example" v-if="ticket.totalRecords > 2  ">
           <ul class="pagination">
             <li class="page-item">
               <button class="page-link" aria-label="Previous" @click="prev" :disabled="params.page === 1">
@@ -409,7 +409,7 @@ onMounted(() => {
                 {{ page }}
               </a>
             </li>
-           
+            
             <li class="page-item">
               <button class="page-link"  aria-label="Next" @click="next" :disabled="params.page === ticket.totalPages">
                 <span aria-hidden="true">&raquo;</span>
