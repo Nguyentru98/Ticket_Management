@@ -106,12 +106,12 @@ const saveTicket = async () => {
 
 // lấy data ticket theo id
 const findTicketById = async (idTicket,tab) => {
-  
   try {
     const result = await ticket.findById(idTicket);
     if(tab == 'detail'){
       let payload = activeTab.value = 'detail';
       switchTab(payload)
+      console.log(formData,"formData")
     }else {
       let payload = activeTab.value = 'form';
       switchTab(payload)
@@ -120,8 +120,6 @@ const findTicketById = async (idTicket,tab) => {
   } catch (error) {
     console.error("Error fetching ticket:", error);
   }
-  
-  
 };
 
 const deleteTicket = async (idTicket) => {
@@ -477,7 +475,7 @@ onMounted(() => {
         <div class="border p-3 col-lg-8">
         <!-- tiêu đề -->
         <div class="border-bottom">
-          <span class="fs-5 px-1">lỗi</span>
+          <span class="fs-5 px-1">lỗi ERP</span>
           <small class="px-1"><i>( 10/12/2024 )</i></small>
         </div>
         <!-- main -->
