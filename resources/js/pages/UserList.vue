@@ -29,7 +29,7 @@ onMounted(() => {
           <th>Phòng ban</th>
           <th>Vai trò</th>
           <th>Chức năng</th>
-          <th>Khóa tài khoản</th>
+          <th>Trạng thái</th>
         </tr>
       </thead>
       <tbody>

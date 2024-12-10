@@ -13,14 +13,13 @@ const logout = () => {
 </script>
 
 <template>
-  <div class="container">
-    <nav class="border p-3">
+  <nav class="p-4 border-bottom">
       <ul>
         <li>
           <img src="/images/logo.png" alt="" style="width: 100px" />
         </li>
         <li>
-          <router-link to="/">Ticket</router-link>
+          <router-link to="/">Trang chủ</router-link>
         </li>
         <li>
           <router-link to="/report">Báo cáo</router-link>
@@ -69,6 +68,8 @@ const logout = () => {
       </div>
     </div>
     </nav>
+  <div class="container">
+    
   </div>
 </template>
 

@@ -7,7 +7,7 @@ export const ticketStore = defineStore("ticket", {
         list: [],
         isLoading: false,
         totalRecords: 0, // Tổng số bản ghi từ API
-        recordsPerPage: 2, // Số bản ghi mỗi trang
+        recordsPerPage: 5, // Số bản ghi mỗi trang
         totalPages: 0, // Tổng số trang
     }),
     
@@ -18,6 +18,7 @@ export const ticketStore = defineStore("ticket", {
               this.list = res.data.data;
               this.totalRecords = res.data.total; // Cập nhật tổng số bản ghi
               this.totalPages = Math.ceil(this.totalRecords / this.recordsPerPage)
+              console.log(this.list)
             } catch (error) {
               console.error("Error loading data:", error);
             }

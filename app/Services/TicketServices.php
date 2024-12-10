@@ -34,7 +34,7 @@ class TicketServices
             'status' => 0,
         ]);
         $user = User::find($request->user_id);
-        Mail::to('trunv98@gmail.com')->send(new NewTicket($ticket,$user));
+        // Mail::to('trunv98@gmail.com')->send(new NewTicket($ticket,$user));
 
         return response()->json(['message' => 'Ticket đã được tạo và thông báo đã được gửi.'], 200);
     }
@@ -50,20 +50,19 @@ class TicketServices
         $ticket->update(['assigned_to' => $request->assigned_to]);
         $userHandler = User::find($request->assigned_to);
         $requester = User::find($ticket->user_id);
-        // dd($ticket,$userHandler,$requester);
-        Mail::to($userHandler->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"userSuport"));
-        Mail::to($requester->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"requester"));
+        // Mail::to($userHandler->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"userSuport"));
+        // Mail::to($requester->email)->send(new TicketAssignee($ticket,$userHandler,$requester,"requester"));
 
         return response()->json(['message' => 'Ticket assigned successfully']);
     }
 
     public function getAllTickets()
     {
-        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->paginate(2); 
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->paginate(5); 
     }
     public function getUserTickets($userId)
     {
-        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->paginate(2);
+        return Ticket::with(['department', 'user', 'category', 'assignedTo'])->where('user_id', $userId)->orWhere('assigned_to',$userId)->paginate(5);
     }
     public function deleteTicket($idTicket)
     {

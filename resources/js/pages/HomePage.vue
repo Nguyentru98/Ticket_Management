@@ -7,6 +7,7 @@ import { userStore } from "../store/user";
 import { categoriesStore } from "../store/categories";
 import { departmentStore } from "../store/department";
 import { watch } from "vue";
+import { Modal } from "bootstrap";
 
 const userLogin = JSON.parse(localStorage.getItem('user'))
 const roles = userLogin.roles;
@@ -17,18 +18,18 @@ const departmentSt = departmentStore()
 const isAdmin = roles.find(role => role.name === 'admin') !== undefined;
 const isUser = roles.find(role => role.name === 'user') !== undefined;
 const isSuport = roles.find(role => role.name === 'suport') !== undefined;
-const isCompleted = ref(false)
-
+const isLoading = ref(false);
 const statusTexts = {
-  0: "Pending",
-  1: "In Progress",
-  2: "Completed",
-  3: "closed",
+  0: "Chờ xử lý",
+  1: "Phê duyệt",
+  2: "Đang xử lý",
+  3: "Hoàn thành",
+  4: "Từ chối",
 };
 const priority_level = [
-  { id: 0, name: "Low" },
-  { id: 1, name: "Medium" },
-  { id: 2, name: "High" }
+  { id: 1, name: "Low" },
+  { id: 2, name: "Medium" },
+  { id: 3, name: "High" }
 ];
 // form data
 const formData = reactive({
@@ -55,6 +56,7 @@ const resetForm = () => {
 
 // chuyển tab list - form ticket
 const switchTab = (tab) => {
+  console.log(tab,'switchTab')
   activeTab.value = tab;
   if (tab === "list") resetForm();
 };
@@ -81,6 +83,7 @@ const openEditForm = (ticket,idTicket) => {
 
 // lưu dữ liệu form ticket
 const saveTicket = async () => {
+  isLoading.value = true;
   try {
     if (isEditMode.value) {
       await ticket.updateTicket(formData);
@@ -96,18 +99,26 @@ const saveTicket = async () => {
     } else {
       console.error("Lỗi không xác định:", error);
     }
+  }finally {
+    isLoading.value = false;
   }
 };
 
-
 // lấy data ticket theo id
-const findTicketById = async (idTicket) => {
-  try {
-    const result = await ticket.findById(idTicket);
-    openEditForm(result,idTicket)
-  } catch (error) {
-    console.error("Error fetching ticket:", error);
+const findTicketById = async (idTicket,form) => {
+  if(form == 'detail'){
+    let tab = activeTab.value = 'detail';
+    switchTab(tab)
+  }else {
+    try {
+      const result = await ticket.findById(idTicket);
+      console.log(result,"ressss")
+      openEditForm(result,idTicket)
+    } catch (error) {
+      console.error("Error fetching ticket:", error);
+    }
   }
+  
 };
 
 const deleteTicket = async (idTicket) => {
@@ -139,6 +150,7 @@ const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toISOString().split('T')[0];
 };
+
 // assignTo
 const assignTo = ($event, idTicket) => {
   user.assignTo($event, idTicket)
@@ -153,6 +165,7 @@ const assignTo = ($event, idTicket) => {
 const getDepartmentById = ($id) => {
   departmentSt.getDepartMentById($id)
 }
+
 // it suport xác nhận hoàn thành
 const completedHandle = (idTicket)=>{
   const payload = {
@@ -190,7 +203,6 @@ const buildParams = (params) => {
   return '?' + arr.join('&');
 };
 
-
 const prev = () => {
   if (params.page > 1) {
     params.page--;
@@ -226,87 +238,142 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <div class="p-2 list-ticket border">
-      <!--search-->
-      <div class="d-flex">
-        <div class="mb-3">
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Từ khóa tìm kiếm..."
-          />
-        </div>
-        <div class="px-3">
-          <button class="btn btn-primary">Tìm kiếm</button>
-          <button class="btn btn-primary mx-2" @click="switchTab('list')">Danh sách Ticket</button>
-          <button class="btn btn-primary" @click="openCreateForm" >Tạo Ticket</button>
-        </div>
-
-        
+    <div class="border-bottom my-4 py-2">
+      <div class="d-flex aligin-item-center">
+        <a @click="switchTab('list')" style="cursor: pointer;">
+          <span class="pi pi-list" style="padding-right: 3px"></span>Danh sách Ticket
+        </a>
       </div>
-      <!--table list ticket-->
-      <table v-if="activeTab === 'list'" class="table table-bordered border-primary">
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Tiêu đề</th>
-            <th>Người yêu cầu</th>
-            <th>Danh mục</th>
-            <th>Mô tả</th>
-            <th>Bộ phận xử lý</th>
-            <th>Người xử lý</th>
-            <th>Độ ưu tiên</th>
-            <th>Ngày cập nhật</th>
-            <th>Trạng thái</th>
-            <th v-if="isAdmin && isSuport">Xác nhận hoàn thành</th>
-            <th>Chức năng</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(ticket, index) in ticket.list" :key="ticket.id">
-            <td>{{ index + 1 }}</td>
-            <td>{{ ticket.title }}</td>
-            <td>{{ ticket.user?.name || "" }}</td>
-            <td>{{ ticket.category?.categories_name || "" }}</td>
-            <td>
-              <div class="text-limited" data-bs-toggle="tooltip" data-bs-placement="top" :title="ticket.description">
-                {{ ticket.description|| "" }}
-              </div>
-            </td>
-            <td>{{ ticket.department?.department_name || "" }}</td>
-            <td>
-              <div class="" v-if="!isAdmin">
-               {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
-              </div>
-              <div class="" v-else-if="isAdmin &&  ticket.status === 3">
-               {{ ticket.assigned_to?.name}}
-              </div>
-              <div v-if="(ticket.status === 1 || ticket.status === 0) && isAdmin ">
-                <select class="form-select" @change="assignTo($event, ticket.id)">
-                  <option disabled selected>Assign to</option>
-                  <option v-for="user in user.listUser" :key="user.id" :value="user.id" :selected="ticket.assigned_to?.id === user.id">
-                    {{ user.name }}
-                  </option>
-                </select>
-              </div>
-            </td>
-            <td>{{ priority_level[ticket.priority].name }}</td>
-            <td>{{ formatDate(ticket.updated_at) }}</td>
-            <td>{{ statusTexts[ticket.status] }}</td>
-            <td v-if="isAdmin && isSuport">
-              <div class="form-check d-flex justify-content-center">
-                <input class="form-check-input" type="checkbox" :checked="ticket.status === 3" value="" id="flexCheckIndeterminate" @click="completedHandle(ticket.id) ">
-              </div>
-            </td>
-            <td>
-              <span class="pi pi-trash px-2" @click="deleteTicket(ticket.id)"></span>
-              <span class="pi pi-file-edit px-2" @click="findTicketById(ticket.id)"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- form tạo-edit ticket -->
-      <div  v-if="activeTab === 'form'" class="form-ticket">
+    </div>
+    <!--table list ticket-->
+    <div class="list-ticket " v-if="activeTab === 'list'">
+      <div>
+        <!--search-->
+        <div class="d-flex my-4">
+          <div class="mb-3">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Từ khóa tìm kiếm..."
+            />
+          </div>
+          <div class="px-3">
+            <button class="btn btn-primary">Tìm kiếm</button>
+          </div>
+        </div>
+        <!-- list -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tiêu đề</th>
+              <th>Người yêu cầu</th>
+              <th>Danh mục</th>
+              <!-- <th>Mô tả</th> -->
+              <th>Bộ phận xử lý</th>
+              <th>Người xử lý</th>
+              <th>Độ ưu tiên</th>
+              <th>Ngày tạo</th>
+              <!-- <th>Trạng thái</th> -->
+              <th v-if="isAdmin && isSuport">Xác nhận hoàn thành</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(ticket, index) in ticket.list" :key="ticket.id">
+              <td>{{ index + 1 }}</td>
+              <td>{{ ticket.title }}</td>
+              <td>{{ ticket.user?.name || "" }}</td>
+              <td>{{ ticket.category?.categories_name || "" }}</td>
+              <!-- <td>
+                <div class="text-limited" data-bs-toggle="tooltip" data-bs-placement="top" :title="ticket.description">
+                  {{ ticket.description|| "" }}
+                </div>
+              </td> -->
+              <td>{{ ticket.department?.department_name || "" }}</td>
+              <td>
+                <div class="" v-if="!isAdmin">
+                  {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
+                </div>
+                <div class="" v-else-if="isAdmin &&  (!ticket.status == 0 && !ticket.status == 1)">
+                  {{ ticket.assigned_to?.name}}
+                </div>
+                <div v-if="(ticket.status == 0 || ticket.status == 1) && isAdmin ">
+                  <select class="form-select" @change="assignTo($event, ticket.id)">
+                    <option disabled selected>Assign to</option>
+                    <option v-for="user in user.listUser" :key="user.id" :value="user.id" :selected="ticket.assigned_to?.id === user.id">
+                      {{ user.name }}
+                    </option>
+                  </select>
+                </div>
+              </td>
+
+              <td>
+                <!-- Thêm class khi id === 2 -->
+                <span class="pi pi-star-fill priority_level"></span>
+                <span 
+                  class="pi pi-star-fill" 
+                  :class="{ 'priority_level': priority_level[ticket.priority-1]?.id == 2 || priority_level[ticket.priority-1]?.id == 3 }">
+                </span>
+                
+                <!-- Thêm class khi id === 3 -->
+                <span 
+                  class="pi pi-star-fill" 
+                  :class="{ 'priority_level': priority_level[ticket.priority-1]?.id == 3 }">
+                </span>
+              </td>
+
+              <td>{{ formatDate(ticket.updated_at) }}</td>
+              <!-- <td>{{ statusTexts[ticket.status] }}</td> -->
+              <td v-if="isAdmin && isSuport">
+                <div class="form-check d-flex justify-content-center">
+                  <input class="form-check-input" type="checkbox" :checked="ticket.status === 3" value="" id="flexCheckIndeterminate" @click="completedHandle(ticket.id) ">
+                </div>
+              </td>
+              <td>
+                <span class="pi pi-trash px-2" @click="deleteTicket(ticket.id)"></span>
+                <span class="pi pi-file-edit px-2" @click="findTicketById(ticket.id)"></span>
+                <span class="pi pi-eye px-2" @click="findTicketById(ticket.id,'detail')"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div @click="openCreateForm" class="btn-create-ticket p-2" style="cursor: pointer;">
+                  <span class="pi pi-plus "><strong class="p-2">Tạo ticket</strong></span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- phân trang -->
+        <div class="d-flex justify-content-center align-items-center" v-if="activeTab === 'list'">
+          <nav aria-label="Page navigation example" v-if="ticket.totalRecords > 2  ">
+            <ul class="pagination">
+              <li class="page-item">
+                <button class="page-link" aria-label="Previous" @click="prev" :disabled="params.page === 1">
+                  <span aria-hidden="true">&laquo;</span>
+                </button>
+              </li>
+              <li class="page-item" v-for="page in ticket.totalPages" :key="page" @click="goToPage(page)" :class="{ active: params.page === page }">
+                <a class="page-link" >
+                  {{ page }}
+                </a>
+              </li>
+              
+              <li class="page-item">
+                <button class="page-link"  aria-label="Next" @click="next" :disabled="params.page === ticket.totalPages">
+                  <span aria-hidden="true">&raquo;</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      <div>
+  </div>
+      </div>
+    </div>
+    <!-- form tạo-edit ticket -->
+    <div  v-if="activeTab === 'form'" class="form-ticket">
         <div class="border d-flex" style="min-height: 100vh">
           <div class="col-lg-4 border" style="background-color: #f4f4f4">
             <div class="p-3">
@@ -391,34 +458,138 @@ onMounted(() => {
               {{isEditMode?'Cập nhật':'Tạo mới'}}
             </button>
           </div>
+          <!-- Hiển thị spinner toàn trang -->
+          <div v-if="isLoading" class="loading-overlay">
+            <div class="spinner-border text-light" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-      </div>
-      <!-- phân trang -->
-      <div class="d-flex justify-content-center align-items-center">
-        <nav aria-label="Page navigation example" v-if="ticket.totalRecords > 2  ">
-          <ul class="pagination">
-            <li class="page-item">
-              <button class="page-link" aria-label="Previous" @click="prev" :disabled="params.page === 1">
-                <span aria-hidden="true">&laquo;</span>
-              </button>
-            </li>
-            <li class="page-item" v-for="page in ticket.totalPages" :key="page" @click="goToPage(page)" :class="{ active: params.page === page }">
-              <a class="page-link" >
-                {{ page }}
-              </a>
-            </li>
-            
-            <li class="page-item">
-              <button class="page-link"  aria-label="Next" @click="next" :disabled="params.page === ticket.totalPages">
-                <span aria-hidden="true">&raquo;</span>
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
     </div>
+    <!-- ticket detail -->
+    <div class="ticket-detail" v-if="activeTab === 'detail'">
+      <div class="row">
+        <div class="border p-3 col-lg-8">
+        <!-- tiêu đề -->
+        <div class="border-bottom">
+          <span class="fs-5 px-1">lỗi</span>
+          <small class="px-1"><i>( 10/12/2024 )</i></small>
+        </div>
+        <!-- main -->
+        <div class="content mt-3 lh-lg">
+          <!-- nội dung ticket -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-6 ">
+                  <div class="">
+                    <label for=""><strong>Bộ phận hỗ trợ: </strong></label>
+                    <span class=" px-2">PCN</span>
+                  </div>
+                  <div class="">
+                    <label for=""><strong>Người xử lý: </strong></label>
+                    <span class=" px-2">tru (PCN)</span>
+                  </div>
+                  <div class="">
+                    <label for=""><strong>Ngày bắt đầu: </strong></label>
+                    <span class=" px-2">10/12/2024</span>
+                  </div>
+                  <div class="">
+                    <label for=""><strong>Ngày kết thúc dự kiến: </strong></label>
+                    <span class=" px-2">15/12/2024</span>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="">
+                    <label for=""><strong>Người yêu cầu: </strong></label>
+                    <span class=" px-2">Admin</span>
+                  </div>
+                  <div class="">
+                    <label for=""><strong>Mức độ ưu tiên: </strong></label>
+                    <span class=" px-2">
+                      <span class="pi pi-star-fill" style="color: yellow;"></span>
+                      <span class="pi pi-star-fill"></span>
+                      <span class="pi pi-star-fill"></span>
+                    </span>
+                  </div>
+                  <div class="">
+                    <label for=""><strong>Trạng thái :</strong></label>
+                    <span class="border rounded-5 px-2 py-1">Đang xử lý</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+          
+          </div>
+          <!-- mô tả ticket -->
+          <div class="row mt-5">
+            <div class="col-12">
+              <span class="border border-bottom-0 p-2">Mô tả</span>
+            </div>
+            <div class="border-top p-2">
+                <p>Lỗi phần mềm ERP</p>
+            </div>
+          </div>
+            
+        </div>
+      </div>
+
+      <!-- comment -->
+      <div class="col-lg-4">
+        <div class="border p-3" style="height: 100%;">
+          <div class="text-center mb-4">
+            <label>Comment</label>
+          </div>
+          <div class="d-flex mb-3">
+            <div class="avatar border d-flex justify-content-center align-items-center round-1 rounded" style="width: 40px; height: 40px; background-color: #3028bc;">
+              <span class="" style="color: #ffff;"><strong>{{ userLogin?.name[0] }}</strong></span>
+            </div>
+            <div class="border d-flex rounded" style="flex: 1;">
+              <div class="col-10">
+                <input type="text" placeholder="Ghi chú..." class="col-12" style="border: none; height: 100%; "> 
+              </div>
+                <button class="pi pi-send col-2 btn btn-primary"></button>
+            </div>
+          </div>
+          <div class="border-top py-2" >
+            <div class="d-flex">
+              <div class="avatar border d-flex justify-content-center align-items-center round-1 rounded" style="width: 40px; height: 40px; background-color: #3028bc;">
+                <span class="" ><strong style="color: #ffff;">{{ userLogin?.name[0] }}</strong></span>
+              </div>
+              <div class="px-2">
+                <div>
+                  <span >Nguyễn Trụ</span> 
+                  <small class="px-1" style="color: #d8dadd">10/12/2024</small>
+                </div>
+                <div>
+                  <p>ticket đã hoàn thành!!!</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-flex">
+              <div class="avatar border d-flex justify-content-center align-items-center round-1 rounded" style="width: 40px; height: 40px;">
+                <span class=""><strong>b</strong></span>
+              </div>
+              <div class="px-2">
+                <div>
+                  <span >Nguyễn B</span> 
+                  <small class="px-1" style="color: #d8dadd">12/12/2024</small>
+                </div>
+                <div>
+                  <p>thanks!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>  
   </div>
 </template>
 
@@ -431,7 +602,8 @@ th {
   text-align: center;
 }
 .pi-file-edit:hover,
-.pi-trash:hover {
+.pi-trash:hover,
+.pi-eye:hover  {
   color: blue;
   cursor: pointer;
 }
@@ -445,4 +617,23 @@ th {
   max-width: 150px; /* Giới hạn chiều rộng */
   cursor: pointer;
 }
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+.btn-create-ticket:hover {
+  background-color: #091e420f;
+}
+.priority_level {
+  color: yellow;
+}
+
 </style>
