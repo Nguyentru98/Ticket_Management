@@ -69,7 +69,7 @@ const openCreateForm = () => {
 };
 
 // Hàm mở form chỉnh sửa
-const openEditForm = (ticket,idTicket) => {
+const openEditForm = (ticket,idTicket,tab) => {
   formData.title = ticket.title || "";
   formData.description = ticket.description || "";
   formData.department_id = ticket.department_id || null;
@@ -78,7 +78,7 @@ const openEditForm = (ticket,idTicket) => {
   formData.user_id = ticket.user_id || null;
   formData.id = idTicket || null;
   isEditMode.value = true; // Chế độ chỉnh sửa
-  switchTab("form"); // Chuyển tab sang form
+  switchTab(tab); // Chuyển tab sang form
 };
 
 // lưu dữ liệu form ticket
@@ -105,19 +105,22 @@ const saveTicket = async () => {
 };
 
 // lấy data ticket theo id
-const findTicketById = async (idTicket,form) => {
-  if(form == 'detail'){
-    let tab = activeTab.value = 'detail';
-    switchTab(tab)
-  }else {
-    try {
-      const result = await ticket.findById(idTicket);
-      console.log(result,"ressss")
-      openEditForm(result,idTicket)
-    } catch (error) {
-      console.error("Error fetching ticket:", error);
+const findTicketById = async (idTicket,tab) => {
+  
+  try {
+    const result = await ticket.findById(idTicket);
+    if(tab == 'detail'){
+      let payload = activeTab.value = 'detail';
+      switchTab(payload)
+    }else {
+      let payload = activeTab.value = 'form';
+      switchTab(payload)
     }
+    openEditForm(result,idTicket,tab)
+  } catch (error) {
+    console.error("Error fetching ticket:", error);
   }
+  
   
 };
 
@@ -332,7 +335,7 @@ onMounted(() => {
               </td>
               <td>
                 <span class="pi pi-trash px-2" @click="deleteTicket(ticket.id)"></span>
-                <span class="pi pi-file-edit px-2" @click="findTicketById(ticket.id)"></span>
+                <span class="pi pi-file-edit px-2" @click="findTicketById(ticket.id,'form')"></span>
                 <span class="pi pi-eye px-2" @click="findTicketById(ticket.id,'detail')"></span>
               </td>
             </tr>

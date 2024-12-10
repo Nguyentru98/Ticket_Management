@@ -39,6 +39,7 @@ export const ticketStore = defineStore("ticket", {
         },
         async findById(idTicket){
            const response = await api.get("/find/ticket/"+ idTicket);
+           console.log(response,"ticket find by id")
            return response.data; 
         },
         async updateTicket(ticket){
