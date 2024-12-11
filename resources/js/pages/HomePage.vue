@@ -271,11 +271,11 @@ onMounted(() => {
               <th>Người yêu cầu</th>
               <th>Danh mục</th>
               <!-- <th>Mô tả</th> -->
-              <th>Bộ phận xử lý</th>
+              <!-- <th>Bộ phận xử lý</th> -->
               <th>Người xử lý</th>
               <th>Độ ưu tiên</th>
               <th>Ngày tạo</th>
-              <!-- <th>Trạng thái</th> -->
+              <th>Trạng thái</th>
               <th v-if="isAdmin && isSuport">Xác nhận hoàn thành</th>
               <th>Chức năng</th>
             </tr>
@@ -291,7 +291,7 @@ onMounted(() => {
                   {{ ticket.description|| "" }}
                 </div>
               </td> -->
-              <td>{{ ticket.department?.department_name || "" }}</td>
+              <!-- <td>{{ ticket.department?.department_name || "" }}</td> -->
               <td>
                 <div class="" v-if="!isAdmin">
                   {{ ticket.assigned_to?.name || "Chờ xét duyệt" }}
@@ -325,7 +325,7 @@ onMounted(() => {
               </td>
 
               <td>{{ formatDate(ticket.updated_at) }}</td>
-              <!-- <td>{{ statusTexts[ticket.status] }}</td> -->
+              <td>{{ statusTexts[ticket.status] }}</td>
               <td v-if="isAdmin && isSuport">
                 <div class="form-check d-flex justify-content-center">
                   <input class="form-check-input" type="checkbox" :checked="ticket.status === 3" value="" id="flexCheckIndeterminate" @click="completedHandle(ticket.id) ">

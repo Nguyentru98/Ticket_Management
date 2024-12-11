@@ -14,7 +14,7 @@
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <div class="form-control">
-              <input :type="isPasswordVisible ? 'text' : 'password'" id="password" placeholder="Enter password" required v-model="password" style="border: none;width: 90%;">
+              <input :type="isPasswordVisible ? 'text' : 'password'" id="password" placeholder="Enter password" required v-model="password" style="border: none;outline: none;width: 90%;">
               <span :class="iconEye ? 'pi pi-eye':'pi pi-eye-slash'" @click="toggleShowPass"></span>
             </div>
             <div v-if="errorsLogin.password" class="errors">
@@ -90,8 +90,8 @@ import { userStore } from "../../store/user";
 const store = useAuthStore();
 const department = departmentStore();
 const userSt = userStore()
-const email = ref("admin@gmail.com");
-const password = ref("password");
+const email = ref();
+const password = ref();
 const isLogin = ref(true);
 const isPasswordVisible = ref(false)
 const iconEye = ref(true)
