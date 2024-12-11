@@ -23,7 +23,7 @@ onMounted(() => {
       <thead>
         <tr>
           <th>STT</th>
-          <th>Tên nguồi dùng</th>
+          <th>Tên người dùng</th>
           <th>Email</th>
           <th>Phone</th>
           <th>Phòng ban</th>

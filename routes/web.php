@@ -16,7 +16,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () { 
+Route::get('{any?}', function () {
     return view('app');
-});
+})->where('any', '.*');
+
 
