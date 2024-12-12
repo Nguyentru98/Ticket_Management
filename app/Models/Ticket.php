@@ -18,10 +18,16 @@ class Ticket extends Model
         'priority',
         'assigned_to',
         'status',
+        'start_time',
+        'end_time',
+        'followers',
     ];
     
     public function assignedTo() : BelongsTo {
         return $this->belongsTo(User::class,'assigned_to');
+    }
+    public function fileowner() : BelongsTo {
+        return $this->belongsTo(User::class,'followers');
     }
     public function user() : BelongsTo {
         return $this->belongsTo(User::class,'user_id');
