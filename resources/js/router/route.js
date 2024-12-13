@@ -19,6 +19,7 @@ const routes = [
     {
         path: '/',
         component: index, // Layout chung
+        // redirect: '/ticket', // Redirect rõ ràng đến ticket
         redirect: '/homePage', // Redirect rõ ràng đến homePage
         children: [
             {
