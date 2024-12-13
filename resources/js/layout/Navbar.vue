@@ -22,6 +22,9 @@ const logout = () => {
           <router-link to="/">Trang chủ</router-link>
         </li>
         <li>
+          <router-link to="/ticket">Ticket</router-link>
+        </li>
+        <li>
           <router-link to="/report">Báo cáo</router-link>
         </li>
         <li v-if="isAdmin">

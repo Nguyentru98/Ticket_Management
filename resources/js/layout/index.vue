@@ -4,9 +4,9 @@ import Footer from '@/layout/Footers.vue'
 </script>
 
 <template>
-    <div class="wrapper ">
+    <div class="wrapper">
         <Navbar></Navbar>
-        <main>
+        <main class="wrapper-main">
             <router-view/>
         </main>
         <!-- <Footer></Footer> -->
