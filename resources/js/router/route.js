@@ -1,8 +1,13 @@
-import HomePage from '@/pages/HomePage.vue';
-import Report from "@/pages/Report.vue";
-import LoginPage from "@/pages/auth/LoginPage.vue";
-import UserList from '@/pages/UserList.vue';
-import Error from '@/pages/Error.vue';
+import HomePage from '../pages/HomePage.vue';
+import Report from '../pages/Report.vue';
+import UserList from '../pages/UserList.vue';
+import Error from '../pages/Error.vue';
+import LoginPage from '../pages/auth/LoginPage.vue'
+import TicketList from '../pages/ticket/TicketList.vue';
+import TicketCreate from '../pages/ticket/TicketCreate.vue';
+import TicketDetail from '../pages/ticket/TicketDetail.vue';
+import TicketEdit from '../pages/ticket/TicketEdit.vue';
+import index from '../layout/index.vue';
 
 const routes = [
     {
@@ -12,12 +17,12 @@ const routes = [
     },
     {
         path: '/',
-        component: () => import("../layout/index.vue"),
-        meta: { requiresAuth: true },
-        redirect: '/', // Đường dẫn mặc định
+        component:index,
+        redirect:'ticket',
         children: [
+
             {
-                path: '/', // Đường dẫn đầy đủ: "/hrm/user"
+                path: 'homePage', // Đường dẫn đầy đủ: "/"
                 component: HomePage,
             },
             {
@@ -25,16 +30,38 @@ const routes = [
                 component: Report,
             },
             {
-                path: 'listUser', // Đường dẫn đầy đủ: "/report"
+                path: 'user', // Đường dẫn đầy đủ: "/report"
                 component: UserList,
             },
-            // {
-            //     path: 'forbidden', // Đường dẫn đầy đủ: "/report"
-            //     name: 'Forbidden',
-            //     component: Error,
-            // },
-        ]
+            {
+                path: 'ticket',
+                redirect : 'ticket/list',
+                children: [
+                    {
+                        path: 'list',
+                        component: TicketList,
+                    },
+                    {
+                        path: 'create', 
+                        component: TicketCreate,
+                    },
+                    {
+                        path: 'edit', 
+                        component: TicketEdit,
+                    },
+                    {
+                        path: 'detail', 
+                        component: TicketDetail,
+                    },
+                ],
+            },
+        ],
     },
     
+    {
+        path: '/:pathMatch(.*)*', // Route cho trang lỗi
+        name: 'Error',
+        component: Error,
+    },
 ];
 export default routes;

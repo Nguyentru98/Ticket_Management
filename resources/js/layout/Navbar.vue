@@ -25,7 +25,7 @@ const logout = () => {
           <router-link to="/report">Báo cáo</router-link>
         </li>
         <li v-if="isAdmin">
-          <router-link to="/listUser">Quản trị người dùng</router-link>
+          <router-link to="/user">Quản trị người dùng</router-link>
         </li>
       </ul>
       <div class="d-flex align-items-center">
