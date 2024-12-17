@@ -12,7 +12,7 @@ export const ticketStore = defineStore("ticket", {
     }),
     
     actions: {
-        async loadData(params) {
+        async getTicket(params) {
             try {
               const res = await api.get("/listTicket" + params);
               this.list = res.data.data;

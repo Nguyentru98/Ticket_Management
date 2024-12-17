@@ -6,7 +6,7 @@ import Footer from '@/layout/Footers.vue'
 <template>
     <div class="wrapper">
         <Navbar></Navbar>
-        <main class="wrapper-main">
+        <main class="wrapper container">
             <router-view/>
         </main>
         <!-- <Footer></Footer> -->

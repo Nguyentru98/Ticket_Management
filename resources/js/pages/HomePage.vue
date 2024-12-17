@@ -210,7 +210,7 @@ const prev = () => {
     params.current_page--
     const queryParams = buildParams(params);
     console.log(queryParams)
-    ticket.loadData(queryParams);
+    ticket.getTicket(queryParams);
   }
 }
 const next = () => {
@@ -219,18 +219,18 @@ const next = () => {
   buildParams()
   const queryParams = buildParams(params);
   console.log(queryParams)
-  ticket.loadData(queryParams);
+  ticket.getTicket(queryParams);
 }
 const goToPage = (page) => {
   params.page = page;
   console.log( params.page ,"param.page")
   let param = buildParams(params)
-  ticket.loadData(param);
+  ticket.getTicket(param);
 };
 
 onMounted(() => {
   const queryParams = buildParams(params);
-  ticket.loadData(queryParams);           
+  ticket.getTicket(queryParams);           
   user.getUserPCN();
   categoriesSt.listCategories();
   getDepartmentById(userLogin.department_id);
